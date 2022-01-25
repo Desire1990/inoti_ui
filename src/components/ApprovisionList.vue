@@ -12,9 +12,9 @@
         <tbody>
             <tr class="text-left" v-for="depot in approvisions.results" :key="depot.id">
                 <td>{{ depot.id }}</td>
-                <td>{{ depot.montant.toLocaleString()}}</td>
-                <td>{{new Date(depot.date).toLocaleString() }}</td>
-                <td> {{ depot.montant_recu.toLocaleString()}}</td>
+                <td>{{ money(depot.montant)}}</td>
+                <td>{{datetime(depot.date) }}</td>
+                <td> {{ money(depot.montant_recu)}}</td>
                 <td><button class="btn btn-info btn-sm ml-1">
                     Modifier
                 </button>
@@ -60,12 +60,12 @@ export default {
     },
     computed:{
         header(){
-			return{
-				headers :{
-					"Authorization" : `Bearer ${this.$store.state.user.access}`
-				}
-			}
-		},
+            return{
+                headers :{
+                    "Authorization" : `Bearer ${this.$store.state.user.access}`
+                }
+            }
+        },
 
     },
     methods: {
@@ -73,7 +73,7 @@ export default {
         if (confirm('Delete ' + trans.id)) {
             axios.delete(this.$store.state.url+`/approvision/${trans.id}`, {
                 headers :{
-					"Authorization" : `Bearer ${this.$store.state.user.access}`}
+                    "Authorization" : `Bearer ${this.$store.state.user.access}`}
                 })
                 .then( response => {
                     this.mounted();
