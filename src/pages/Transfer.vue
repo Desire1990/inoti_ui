@@ -1,35 +1,29 @@
 <template>
-    <div> 
-        
+    <div>        
         <div class="text-right">
             <searchbar />
-             <button class="btn btn-primary mt-3" @click="toggleForm">Nouvel approvision</button>
-             <ModalApprovision v-if='new_depot' @close='close' v-bind:toggleForm="toggleForm"/>             
-            <ApprovisionList class=" mt-3"/>
+             <button class="btn btn-primary mt-3" @click="toggleForm">Nouveau transfer</button>
+             <TransferModel v-if='new_depot' @close='close' v-bind:toggleForm="toggleForm"/>             
+            <TransferList  class=" mt-3"/>
         </div>
     </div>
 </template>
-
 <script>
-import ApprovisionList from '../components/ApprovisionList.vue'
-import ModalApprovision from '../components/ModalApprovision.vue'
+import TransferList from '../components/TransferList.vue'
+import TransferModel from '../components/TransferModel.vue'
 import searchbar from '../components/SearchBar.vue'
 export default {
-  components: { ApprovisionList, ModalApprovision, searchbar },
+  components: { TransferList, TransferModel, searchbar },
     data(){
-        return {
-           
+        return {           
         new_depot : false
-        } 
-    },
-    mounted() {
+        }
     },
     computed:{
         header(){
             return{
                 headers:{
                     "Authorization" : `Bearer  ${this.$store.state.user.access }`
-
                 }
             }
         }
@@ -38,9 +32,8 @@ export default {
         close(){
             this.new_depot=false
         },
-
         toggleForm(){
-            this.new_depot = true
+            this.new_depot =true
         }
     }
 }

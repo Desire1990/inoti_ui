@@ -85,6 +85,16 @@ export default {
          
     },
     methods: {
+        fetchData(){
+            axios.get(this.$store.state.url+"/depot/", this.header )
+                .then(res => {
+                    this.$store.state.depots = res.data          
+                })
+                .catch(err => {
+                    console.error(err); 
+                })
+            
+        },        
         depot(){
             axios.post(this.$store.state.url+"/depot/",{
                 nom : this.form.nom,
@@ -95,7 +105,7 @@ export default {
                },this.header
             ).then((response) => {
                     console.log(response.data)
-                    this.$store.state.depots = response.data 
+                    this.fetchData()
                     this.$emit('close')
             }).catch((error) => {
               console.error(error);
@@ -106,9 +116,8 @@ export default {
             axios.put(this.$store.state.url+"/depot/"+this.depot_id +"/", this.form, this.header)
             .then(response => {
                 console.log(response.data)
-                this.$store.state.depots = response.data     
+                this.fetchData()
                 this.$emit('close')
-
             }).catch(err => {
                 console.error(err); 
             })

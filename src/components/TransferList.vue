@@ -1,7 +1,7 @@
 <template>
     <div>
     <table class="table table-light text-left" >
-        <thead class="tr">
+        <thead >
             <tr style='{background-color:pink;}'>
                 <th>#</th> 
                 <th>MONTANT($)</th>
@@ -41,7 +41,6 @@
 </template>
 
 <script>
-
 import axios from 'axios'
 import ModaleDepot from '../components/DepotModel'
 export default {
@@ -60,7 +59,6 @@ export default {
             servie:false,
             revele : false,
             updatedepot:null
-
             
         }
     },
@@ -88,19 +86,8 @@ export default {
                 }
             }
         },
-
     },
     methods: {
-        fetchData(){
-            axios.get(this.$store.state.url+"/depot/", this.header )
-            .then(res => {
-                this.$store.state.depots = res.data          
-                console.log(res.data.results);
-            })
-            .catch(err => {
-                console.error(err); 
-            })           
-        },
         close(){
             this.update=false
         },
@@ -108,7 +95,6 @@ export default {
             this.update = true
             this.updatedepot=depot
             console.log(this.depot)
-
         },
         DeleteDepot: function(dep) {
             if (confirm('Delete ' + dep.id)) {
@@ -117,8 +103,8 @@ export default {
                         "Authorization" : `Bearer ${this.$store.state.user.access}`}
                     })
                     .then( response => {
-                        this.fetchData()
-                        return response
+                        this.$store.state.depots = response.data
+                        console.log(response.data);
                     });
                 }
             },
@@ -141,10 +127,5 @@ export default {
 }
 .blue {
     background-color: white;
-}
-.tr {
-    background-color: #20c997;
-    text-align: left;
-    text-decoration-color: white;
 }
 </style>

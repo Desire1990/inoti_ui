@@ -5,23 +5,36 @@
             <div class="btn btn-danger close-btn" @click="emitClose">X</div>
             <div class="card-modal mt-4">
 
+                <div class="input-group mt-3">
+                    <label for="montant">NOM</label>
+                    <input class="" type="text" v-model="form.nom" name="">
+                    <span v-if="errors.nom" class="text-danger">{{ errors.nom}}</span>
+                </div>
 
                 <div class="input-group mt-3">
                     <label for="montant">MONTANT</label>
-                    <input class="" type="number" placeholder="montant en $" v-model="form.montant" name="">
+                    <input class="" type="number" v-model="form.montant" name="">
                     <span v-if="errors.montant" class="text-danger">{{ errors.montant}}</span>
                 </div>
-
                 <div class="input-group mt-3">
-                    <label for="montant">MONTANT_RECU</label>
-                    <input class="" type="number" placeholder="montant en fbu" v-model="form.montant_recu" name="">
-                    <span v-if="errors.montant_recu" class="text-danger">{{ errors.montant_recu}}</span>
+                    <label for="montant">MONTANT</label>
+                    <input class="" type="number" v-model="form.montant_fbu" name="">
+                    <span v-if="errors.montant_fbu" class="text-danger">{{ errors.montant_fbu}}</span>
                 </div>
-                <br/>
+                <div class="input-group mt-3">
+                    <label for="montant">TAUX</label>
+                    <input class="" type="number" v-model="form.taux" name="">
+                    <span v-if="errors.taux" class="text-danger">{{ errors.taux}}</span>
+                </div>
+                <div class="input-group mt-3">
+                    <label for="montant">TELEPHONE</label>
+                    <input class="" type="text" v-model="form.tel" name="">
+                    <span v-if="errors.tel" class="text-danger">{{ errors.tel}}</span>
+                </div>               
                 <center>
                 <div class="input-group mt-3">
-                     <button v-if="updatedepot" @click="saveUpdateDepot">Modifier</button>
-                    <button v-else @click="approvision" class="btn btn-info">Valider</button>
+                    <button v-if="updatedepot" @click="saveUpdateDepot">Modifier</button>
+                    <button v-else @click="depot">Valider</button>
                 </div>
                 </center>
             </div>
@@ -36,24 +49,31 @@ export default {
     data() {
         return {
             form :{
+                nom : "",
                 montant : "",
-                montant_recu : "",
+                montant_fbu : "",
+                taux : "",
+                tel : ""
             },
-            errors : {},
-            approvisions : this.$store.state.approvisions,
-            users : {},
+            depot_id:null,
             update:false,
-            approvision_id:null
+            errors : {},
+            users : {}
             
         }
     },
-    mounted(){
+    mounted() {
         if(this.updatedepot){
-            this.form.montant = this.updatedepot.montant
-            this.form.montant_recu = this.updatedepot.montant_recu
-            this.approvision_id=this.updatedepot.id
+            this.form.nom=this.updatedepot.nom
+            this.form.montant=this.updatedepot.montant
+            this.form.montant_fbu=this.updatedepot.montant_fbu
+            this.form.taux=this.updatedepot.taux
+            this.form.tel=this.updatedepot.tel
+            this.depot_id =this.updatedepot.id
         }
-    },   
+        console.log(this.updatedepot)         
+    },
+   
     computed:{
          header(){
             return{
@@ -62,54 +82,43 @@ export default {
                 }
             }
         },
-          
+         
     },
     methods: {
-        fetchData(){
-            axios.get(this.$store.state.url+"/approvision/", this.header )
-                .then(res => {
-                    this.$store.state.approvisions = res.data          
-                })
-                .catch(err => {
-                    console.error(err); 
-                })
-            
-        },
-        approvision(){
-            axios.post(this.$store.state.url+"/approvision/",{
-                montant: this.form.montant,
-                montant_recu:this.form.montant_recu
-            },this.header
+        depot(){
+            axios.post(this.$store.state.url+"/depot/",{
+                nom : this.form.nom,
+                montant : this.form.montant,
+                montant_fbu : this.form.montant_fbu,
+                taux : this.form.taux,
+                tel : this.form.tel
+               },this.header
             ).then((response) => {
                     console.log(response.data)
-                    this.fetchData()
+                    this.$store.state.depots = response.data 
                     this.$emit('close')
             }).catch((error) => {
               console.error(error);
             })                  
-
         },
         saveUpdateDepot(){
-            axios.put(this.$store.state.url+"/approvision/"+this.approvision_id +"/", this.form, this.header)
+            axios.put(this.$store.state.url+"/depot/"+this.depot_id +"/", this.form, this.header)
             .then(response => {
                 console.log(response.data)
-                this.fetchData()
+                this.$store.state.depots = response.data     
                 this.$emit('close')
             }).catch(err => {
                 console.error(err); 
             })
-
         },
         emitClose(){
             this.$emit('close')
-            console.log('not closed')
         }
     }
 }
 </script>
 
 <style>
-
 .input-group{
     display: flex;
     justify-content: space-around;
@@ -119,7 +128,6 @@ export default {
     width: 100px;
     text-align: left;
 }
-
 /** POUR LE MODAL */
 .bloc-modale{
     position: fixed;
@@ -133,7 +141,6 @@ export default {
     justify-content: center;
     align-items: center;
 }
-
 .overlay{
     position: fixed;
     top:0;
@@ -143,14 +150,11 @@ export default {
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.5);
-
 }
-
 .modale{
     position:fixed;
     top:30%;
     height: auto;
-
      
 }
 .card-modal
@@ -160,7 +164,6 @@ export default {
     
     
 }  
-
 .close-btn{
     position: absolute;
     top:5px;
