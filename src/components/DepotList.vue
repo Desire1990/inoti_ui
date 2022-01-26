@@ -13,7 +13,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr class="text-left" v-bind:class="{'blue': !clicked && !servie, 'red': clicked, 'yellow':servie}" v-for="depot in depots.results" :key="depot.id"  >
+            <tr class="text-left" v-for="depot in depots.results" :key="depot.id"  >
                 <td>{{ depot.id }}</td>
                 <td> {{ money(depot.montant)}} $</td>
                 <td>{{ depot.nom }}</td>
@@ -133,15 +133,6 @@ export default {
 }
 </script>
 <style>
-.red {
-    background-color: red;
-}
-.yellow {
-    background-color: yellow;
-}
-.blue {
-    background-color: white;
-}
 .tr {
     background-color: #20c997;
     text-align: left;
