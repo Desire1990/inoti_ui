@@ -3,8 +3,7 @@
     <div class="title"> 
         <button @click="loggout"  class="btn btn-danger btn-sm ml-1 loggout">
             logout
-        </button>
-                   
+        </button>                   
            <center><h3 style="padding:10px 10px 10px 10px;">INOTI UI</h3> </center>
          </div>
         <div class="menu-items">
@@ -24,7 +23,7 @@
                     <h6>Transaction</h6>
                 </div>
             </router-link> -->
-            <router-link to="/approvision" active-class="active" tag="button" exact class="side-btn">
+            <router-link to="/approvision" active-class="active" tag="button" exact class="side-btn" v-if="$store.state.user.groups.includes('admin')">
                 <div class="link-container">
                     <h6>Approvision</h6>
                 </div>

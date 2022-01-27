@@ -1,8 +1,8 @@
 <template>
-    <div class="dashboard">
-        <Sidebar/>
+    <div  class="dashboard" style="background-color:whitesmoke;">
+        <Sidebar style="background-color:teal ;" />
         <div class="content">
-            <router-view/>
+            <router-view />
         </div>
     </div>
 </template>
