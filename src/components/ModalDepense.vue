@@ -6,31 +6,17 @@
             <div class="card-modal mt-4">
 
                 <div class="input-group mt-3">
-                    <label for="montant">NOM</label>
-                    <input class="" type="text" v-model="form.nom" name="">
-                    <span v-if="errors.nom" class="text-danger">{{ errors.nom}}</span>
-                </div>
-
-                <div class="input-group mt-3">
                     <label for="montant">MONTANT</label>
                     <input class="" type="number" v-model="form.montant" name="">
                     <span v-if="errors.montant" class="text-danger">{{ errors.montant}}</span>
                 </div>
+
                 <div class="input-group mt-3">
-                    <label for="montant">MONTANT</label>
-                    <input class="" type="number" v-model="form.montant_fbu" name="">
-                    <span v-if="errors.montant_fbu" class="text-danger">{{ errors.montant_fbu}}</span>
+                    <label for="montant">MOTIF</label>
+                    <textarea class="" type="" v-model="form.motif" name=""/>
+                    <span v-if="errors.motif" class="text-danger">{{ errors.motif}}</span>
                 </div>
-                <div class="input-group mt-3">
-                    <label for="montant">TAUX</label>
-                    <input class="" type="number" v-model="form.taux" name="">
-                    <span v-if="errors.taux" class="text-danger">{{ errors.taux}}</span>
-                </div>
-                <div class="input-group mt-3">
-                    <label for="montant">TELEPHONE</label>
-                    <input class="" type="text" v-model="form.tel" name="">
-                    <span v-if="errors.tel" class="text-danger">{{ errors.tel}}</span>
-                </div>               
+              
                 <center>
                 <div class="input-group mt-3">
                     <button v-if="updatedepot" @click="saveUpdateDepot">Modifier</button>
@@ -49,28 +35,24 @@ export default {
     data() {
         return {
             form :{
-                nom : "",
                 montant : "",
-                montant_fbu : "",
-                taux : "",
-                tel : ""
+                motif : "",
             },
             depot_id:null,
             update:false,
             errors : {},
-            users : {}
+            users : {},
+            depense_id:null
             
         }
     },
 
     mounted() {
         if(this.updatedepot){
-            this.form.nom=this.updatedepot.nom
             this.form.montant=this.updatedepot.montant
-            this.form.montant_fbu=this.updatedepot.montant_fbu
-            this.form.taux=this.updatedepot.taux
-            this.form.tel=this.updatedepot.tel
-            this.depot_id =this.updatedepot.id
+            this.form.motif=this.updatedepot.motif
+            this.depense_id=this.updatedepot.id
+
         }
         console.log(this.updatedepot)         
     },
@@ -86,11 +68,21 @@ export default {
          
     },
     methods: {
+        fetchData(){
+            axios.get(this.$store.state.url+"/depense/", this.header )
+                .then(res => {
+                    this.$store.state.depenses = res.data          
+                })
+                .catch(err => {
+                    console.error(err); 
+                })
+            
+        },
         depot(){
             axios.post(this.$store.state.url+"/depense/",this.form, this.header
             ).then((response) => {
                     console.log(response.data)
-                    console.log("success!")
+                    this.fetchData()
                     this.$emit('close')
             }).catch((error) => {
               console.error(error);
@@ -98,20 +90,17 @@ export default {
 
         },
         saveUpdateDepot(){
-            console.log(this.form)
-            axios.put(this.$store.state.url+"/depense/"+this.depot_id +"/", this.form, this.header)
-            .then(res => {
-                console.log(res)
-                this.$emit('close')
-
-            })
-            .catch(err => {
-                console.error(err); 
-            })
+            axios.put(this.$store.state.url+"/depense/"+this.depense_id +"/", this.form, this.header
+            ).then((response) => {
+                    console.log(response.data)
+                    this.fetchData()
+                    this.$emit('close')
+            }).catch((error) => {
+              console.error(error);
+            })                  
 
         },
         emitClose(){
-            console.log('holla closed emited')
             this.$emit('close')
         }
         }

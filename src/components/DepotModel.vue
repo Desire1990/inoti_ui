@@ -13,26 +13,38 @@
 
                 <div class="input-group mt-3">
                     <label for="montant">MONTANT</label>
-                    <input class="" type="number" v-model="form.montant" name="">
+                    <input class="" type="number" :value='form.montant' @change='updateMontant'>
                     <span v-if="errors.montant" class="text-danger">{{ errors.montant}}</span>
                 </div>
                 <div class="input-group mt-3">
-                    <label for="montant">MONTANT</label>
-                    <input class="" type="number" v-model="form.montant_fbu" name="">
-                    <span v-if="errors.montant_fbu" class="text-danger">{{ errors.montant_fbu}}</span>
-                </div>
-                <div class="input-group mt-3">
                     <label for="montant">TAUX</label>
-                    <input class="" type="number" v-model="form.taux" name="">
+                    <input class="" type="number" :value='form.montant' @change='updateTaux'>
                     <span v-if="errors.taux" class="text-danger">{{ errors.taux}}</span>
                 </div>
                 <div class="input-group mt-3">
                     <label for="montant">TELEPHONE</label>
                     <input class="" type="text" v-model="form.tel" name="">
                     <span v-if="errors.tel" class="text-danger">{{ errors.tel}}</span>
-                </div>               
-                <center>
+                </div>                
                 <div class="input-group mt-3">
+                    <label for="status">STATUS</label>
+                    <div class="control">
+                        <select v-model="form.status">
+                          <option value="default">Default</option>
+                          <option value="appel">Appellé</option>
+                          <option value="servi">Servir</option>
+                        </select>
+                    </div>
+
+                    <span v-if="errors.status" class="text-danger">{{ errors.status}}</span>
+                </div>               
+                <div class="input-group mt-3">
+                    <label for="montant">MONTANT REEL</label>
+                    <input v-model='form.montant_fbu' class="" name="montant_fbu" placeholder="somme en fbu" type="number" step="any">
+                    <span v-if="errors.montant_fbu" class="text-danger">{{ errors.montant_fbu}}</span>
+                </div>
+                <center>
+                <div class="input-group mt-3" >
                     <button v-if="updatedepot" @click="saveUpdateDepot">Modifier</button>
                     <button v-else @click="depot">Valider</button>
                 </div>
@@ -51,9 +63,10 @@ export default {
             form :{
                 nom : "",
                 montant : "",
-                montant_fbu : "",
-                taux : "",
-                tel : ""
+                montant_fbu :"",
+                taux :"",
+                tel : "",
+                status:''
             },
             depot_id:null,
             update:false,
@@ -69,22 +82,20 @@ export default {
             this.form.montant_fbu=this.updatedepot.montant_fbu
             this.form.taux=this.updatedepot.taux
             this.form.tel=this.updatedepot.tel
+            this.form.status=this.updatedepot.status
             this.depot_id =this.updatedepot.id
         }
         console.log(this.updatedepot)         
     },
-   
-    computed:{
-         header(){
-			return{
-				headers :{
-					"Authorization" : `Bearer ${this.$store.state.user.access}`
-				}
-			}
-		},
-         
-    },
     methods: {
+        updateMontant(event){
+            this.form.montant=event.target.value
+            this.form.montant_fbu = this.form.montant*this.form.taux
+        },
+        updateTaux(e){
+            this.form.taux = e.target.value
+            this.form.montant_fbu = this.form.montant*this.form.taux
+        },
         fetchData(){
             axios.get(this.$store.state.url+"/depot/", this.header )
                 .then(res => {
@@ -101,6 +112,7 @@ export default {
                 montant : this.form.montant,
                 montant_fbu : this.form.montant_fbu,
                 taux : this.form.taux,
+                status : this.form.status,
                 tel : this.form.tel
                },this.header
             ).then((response) => {
@@ -121,6 +133,12 @@ export default {
             }).catch(err => {
                 console.error(err); 
             })
+
+        },
+        Appeler(){
+
+        },
+        Servir(){
 
         },
         emitClose(){
