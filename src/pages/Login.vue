@@ -13,7 +13,7 @@
 
                     <div class="form-group">
                         <label>Password</label>
-                        <input type="password" class="form-control form-control-lg" name="password" required id="id_password" v-model='password' autocomplete="on" />
+                        <input type="password" placeholder="password" class="form-control form-control-lg" name="password" required id="id_password" v-model='password' autocomplete="on" />
                     </div>
                     <label for="id_password" v-if='logs.length>0' style="color:red">{{logs}}</label>
 

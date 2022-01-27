@@ -1,28 +1,91 @@
 <template>
-    <div class="settings">
-    <div class="row">
-
-    <div class="col-6 p-2">
-          <div class="col-10">
-              <div class="count_view blue  ">
-                <div class="count_list">
-                  <h2>CAPITAL CANADA</h2>
-                  <p>{{(currency(CTotal))}}</p>
-          
+  <div class="pricing6 py-5 bg-light">
+  <div class="container"> 
+    <div class="row justify-content-center">
+      <div class="col-md-8 text-center">
+        <h1 class="mb-3">Transfer to make your Work Effective</h1>
+        <h3 class="subtitle font-weight-normal">We offer 100% satisafaction and Money back Guarantee</h3>
+      </div>
+    </div>
+    <!-- row  -->
+    <div class="row mt-4" >
+      <!-- column  -->
+      <div class="col-md-6" v-if="$store.state.user.groups.includes('admin')">
+        <div class="card card-shadow border-0 mb-4">
+          <div class="card-body p-4">
+            <div class="d-flex align-items-center">
+              <h5 class="font-weight-medium mb-0">Canada</h5>
+              <div class="ml-auto"><span class="badge badge-danger font-weight-normal p-2">home</span></div>
+            </div>
+            <div class="row">
+              <div class="col-lg-7 text-center">
+                <div class="price-box my-3">
+                  <span class="text-dark display-5">{{(currency(CTotal))}}</span>
+                  <a class="btn btn-info-gradiant font-14 border-0 text-white p-3 btn-block mt-3" href="/">NICE WORK AND IDEA</a>
                 </div>
+              </div>
+              <div class="col-lg-5 align-self-center">
+                <ul class="list-inline pl-3 font-14 font-weight-medium text-dark">
+                  <li class="py-2"><i class="icon-check text-info mr-2"></i> <span>All Days a Week </span></li>
+                  <li class="py-2"><i class="icon-check text-info mr-2"></i> <span>Dedicated To Canadian</span></li>
+                </ul>
               </div>
             </div>
-              <div class="col-10">
-              <div class="count_view green">
-                <div class="count_list">
-                  <h2>CAPITAL BURUNDI</h2>
-                  <p>{{money(BTotal)}} FBU</p>
+          </div>
+        </div>
+      </div>  
+      <div class="col-md-6" v-if="$store.state.user.groups.includes('admin')">
+        <div class="card card-shadow border-0 mb-4">
+          <div class="card-body p-4">
+            <div class="d-flex align-items-center">
+              <h5 class="font-weight-medium mb-0">Burundi</h5>
+            </div>
+            <div class="row">
+              <div class="col-lg-7 text-center">
+                <div class="price-box my-3">
+                  <span class="text-dark display-5">{{(money(BTotal))}} Fbu</span>
+                  <a class="btn btn-info-gradiant font-14 border-0 text-white p-3 btn-block mt-3" href="/">NICE WORK AND IDEA</a>
                 </div>
               </div>
-            </div> 
-          </div>  
-          </div> 
+              <div class="col-lg-5 align-self-center">
+                <ul class="list-inline pl-3 font-14 font-weight-medium text-dark">
+                  <li class="py-2"><i class="icon-check text-info mr-2"></i> <span>All Days a Week </span></li>
+                  <li class="py-2"><i class="icon-check text-info mr-2"></i> <span>Dedicated To Burundian</span></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- column  -->
+      <!-- column  -->
+      <div class="col-md-6" v-else>
+        <div class="card card-shadow border-0 mb-4">
+          <div class="card-body p-4">
+            <div class="d-flex align-items-center">
+              <h5 class="font-weight-medium mb-0">Burundi</h5>
+            </div>
+            <div class="row">
+              <div class="col-lg-7 text-center">
+                <div class="price-box my-3">
+                  <span class="text-dark display-5">{{(money(BTotal))}} Fbu</span>
+                  <a class="btn btn-info-gradiant font-14 border-0 text-white p-3 btn-block mt-3" href="/">NICE WORK AND IDEA</a>
+                </div>
+              </div>
+              <div class="col-lg-5 align-self-center">
+                <ul class="list-inline pl-3 font-14 font-weight-medium text-dark">
+                  <li class="py-2"><i class="icon-check text-info mr-2"></i> <span>All Days a Week </span></li>
+                  <li class="py-2"><i class="icon-check text-info mr-2"></i> <span>Dedicated To Burundo-canadian</span></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- column  -->
+    </div>
   </div>
+</div>
 </template>
 
 <script>
@@ -73,44 +136,87 @@ export default {
 }
 </script>
 <style scoped>
+@import url(//fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700,800);
+.pricing6 {
+  font-family: "Montserrat", sans-serif;
+  color: #8d97ad;
+  font-weight: 300;
+}
 
-.count_view {
-  height: 80px;
-  margin-top: 7px;
-  border-radius: 5px; }
-  .count_view.red {
-    background-color: rgba(255, 0, 0, 0.21); }
-  .count_view.blue {
-    background-color: rgba(0, 123, 255, 0.18); }
-  .count_view.yellow {
-    background-color: rgba(255, 255, 0, 0.23); }
-  .count_view.orange {
-    background-color: rgba(255, 165, 0, 0.19); }
-  .count_view.green {
-    background-color: rgba(49, 212, 133, 0.23); }
-  .count_view .count_list {
-    width: 79%;
-    float: left; }
-    .count_view .count_list h2 {
-      font-size: 15px;
-      padding-top: 15px;
-      font-weight: 700;
-      margin-bottom: 0px;
-      text-align: center; }
-    .count_view .count_list p {
-      font-size: 25px;
-      font-weight: 600;
-      margin: 0px;
-      text-align: center; }
-  .count_view .detail_list_icon i {
-    font-size: 30px;
-    padding-top: 25px; }
-    .count_view .detail_list_icon i.pink {
-      color: #ff6565; }
-    .count_view .detail_list_icon i.blue {
-      color: #519cef; }
-    .count_view .detail_list_icon i.yellow {
-      color: #f7b743; }
-    .count_view .detail_list_icon i.green {
-      color: #25b725; }
+.pricing6 h1,
+.pricing6 h2,
+.pricing6 h3,
+.pricing6 h4,
+.pricing6 h5,
+.pricing6 h6 {
+  color: #3e4555;
+}
+
+.pricing6 .font-weight-medium {
+  font-weight: 500;
+}
+
+.pricing6 .bg-light {
+  background-color: #f4f8fa !important;
+}
+
+.pricing6 h5 {
+    line-height: 22px;
+    font-size: 18px;
+}
+
+.pricing6 .subtitle {
+  color: #8d97ad;
+  line-height: 24px;
+}
+
+.pricing6 .card.card-shadow {
+  -webkit-box-shadow: 0px 0px 30px rgba(115, 128, 157, 0.1);
+  box-shadow: 0px 0px 30px rgba(115, 128, 157, 0.1);
+}
+
+.pricing6 .price-box sup {
+  top: -20px;
+  font-size: 16px;
+}
+
+.pricing6 .price-box .display-5 {
+  line-height: 58px;
+  font-size: 3rem;
+}
+
+.pricing6 .btn-info-gradiant {
+    background: #188ef4;
+    background: -webkit-linear-gradient(legacy-direction(to right), #188ef4 0%, #316ce8 100%);
+    background: -webkit-gradient(linear, left top, right top, from(#188ef4), to(#316ce8));
+    background: -webkit-linear-gradient(left, #188ef4 0%, #316ce8 100%);
+    background: -o-linear-gradient(left, #188ef4 0%, #316ce8 100%);
+    background: linear-gradient(to right, #188ef4 0%, #316ce8 100%);
+}
+
+.pricing6 .btn-info-gradiant:hover {
+    background: #316ce8;
+    background: -webkit-linear-gradient(legacy-direction(to right), #316ce8 0%, #188ef4 100%);
+    background: -webkit-gradient(linear, left top, right top, from(#316ce8), to(#188ef4));
+    background: -webkit-linear-gradient(left, #316ce8 0%, #188ef4 100%);
+    background: -o-linear-gradient(left, #316ce8 0%, #188ef4 100%);
+    background: linear-gradient(to right, #316ce8 0%, #188ef4 100%);
+}
+
+.pricing6 .btn-md {
+    padding: 15px 45px;
+    font-size: 16px;
+}
+
+.pricing6 .text-info {
+    color: #188ef4 !important;
+}
+
+.pricing6 .badge-danger {
+    background-color: #ff4d7e;
+}
+
+.pricing6 .font-14 {
+  font-size: 14px;
+}
 </style>
