@@ -127,6 +127,7 @@ label {
 }
 body,#body {
   background: #eee;
+  background-image: url('../download.jpeg');
   margin: 0;
   padding: 0;
   height: 100%;
