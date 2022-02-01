@@ -1,18 +1,20 @@
-<template>
+<template  >
 <center>
-    <div class="col-md-6">
-        <div class="vertical-center">
+    <div class="col-md-6" >
+        <div class="vertical-center ">
             <div class="inner-block">
-                <form>
-                    <h3>Sign In</h3>
+                <form class="login">
+                    <center>
+                        <h1>Sign In</h1>
+                    </center>
 
                     <div class="form-group">
-                        <label>Username</label>
+                        <label><h3>Username</h3></label>
                         <input type="text" name="username" placeholder="username" class="form-control form-control-lg" required id="id_username" v-model='username' autocomplete="on" />
                     </div>
 
                     <div class="form-group">
-                        <label>Password</label>
+                        <label><h3>Password</h3></label>
                         <input type="password" placeholder="password" class="form-control form-control-lg" name="password" required id="id_password" v-model='password' autocomplete="on" />
                     </div>
                     <label for="id_password" v-if='logs.length>0' style="color:red">{{logs}}</label>
@@ -20,7 +22,7 @@
                     <button type="submit" class="btn btn-dark btn-lg btn-block" @click.prevent='signIn'>Sign In</button>
 
                     <p class="forgot-password text-right mt-2 mb-4">
-                        <router-link to="/forgot-password">Forgot password ?</router-link>
+                        <router-link to="/forgot-password"><strong>Forgot password ?</strong></router-link>
                     </p>
 
                     <div class="social-icons">
@@ -49,7 +51,7 @@ export default {
             logs:'',
             username:'',
             password:'',
-            url:this.$store.state.url
+            url:this.$store.state.url           
         }
     },
     methods:{
@@ -71,3 +73,9 @@ export default {
     }
 };
 </script>
+<style>
+    .login{
+        background-image: url('../assets/dollars.jpeg');
+        color:#000;
+    }
+</style>

@@ -1,7 +1,7 @@
 <template>
 <div class=" d-inline-flex pull-left mt-3">
  <div class="input-group">
-    <input type="text" class="form-control" @keydown="searchValue" v-model="keySearch" placeholder="Rechercher">
+  <input class="form-control" @keyup.enter="searchBarcode()" type="text" placeholder="Search" />
     <div class="input-group-append">
       <button class="btn btn-secondary" type="button">
         <i class="fa fa-search"></i>
@@ -16,15 +16,32 @@
 export default {
   data() {
     return {
-      keySearch: ""
+      searchQuery: "",
+      depots : this.$store.state.depots
+    }
+  },
+  computed: {
+    filteredResources (){
+      if(this.searchQuery){
+      return this.depots.filter((item)=>{
+        return item.date.startsWith(this.searchQuery);
+      })
+      }else{
+        return this.depots;
+      }
     }
   },
   methods: {
-    searchValue(){
-      //console.log(this.keySearch)
-
-      this.$emit("searchValue", this.keySearch)
-    }
+    searchBarcode() {
+      axios
+        .get('api/Products/SearchProductBarcode/' + this.code)
+        .then(function(response) {
+          this.addDetail(response.data)
+        })
+        .catch(function(error) {
+          console.log(error)
+        })
+    },
 
   }
 

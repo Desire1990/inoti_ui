@@ -18,11 +18,7 @@
                     <h6>Transfer</h6>
                 </div>
             </router-link>
-<!--             <router-link to="/transaction" active-class="active" tag="button" exact class="side-btn">
-                <div class="link-container">
-                    <h6>Transaction</h6>
-                </div>
-            </router-link> -->
+
             <router-link to="/approvision" active-class="active" tag="button" exact class="side-btn" v-if="$store.state.user.groups.includes('admin')">
                 <div class="link-container">
                     <h6>Approvision</h6>

@@ -1,10 +1,9 @@
-/* eslint-disable */ 
 <template>
     <div>        
         <div class="text-right">
             <searchbar />
             <hr>
-             <button class="btn btn-primary mt-3" @click="toggleForm" v-if="$store.state.user.groups.includes('admin')">Nouveau transfer</button>
+             <button style="background-color:teal; color: white;" class="btn btn mt-3" @click="toggleForm" v-if="$store.state.user.groups.includes('admin')">Nouveau transfer</button>
              <ModaleDepot v-if='new_depot' @close='close' v-bind:toggleForm="toggleForm"/>             
             <DepotList  class=" mt-3"/>
         </div>

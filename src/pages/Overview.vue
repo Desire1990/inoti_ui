@@ -3,7 +3,7 @@
   <div class="container"> 
     <div class="row justify-content-center">
       <div class="col-md-8 text-center">
-        <h1 class="mb-3">Transfer to make your Work Effective</h1>
+        <h1 class="mb-3">Money Transfer to make your Work Effective</h1>
         <h3 class="subtitle font-weight-normal">We offer 100% satisafaction and Money back Guarantee</h3>
       </div>
     </div>

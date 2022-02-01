@@ -13,34 +13,34 @@
 
                 <div class="input-group mt-3">
                     <label for="montant">MONTANT</label>
-                    <input class="" type="number" :value='form.montant' @change='updateMontant'>
+                    <input class="" type="number" v-model='form.montant'>
                     <span v-if="errors.montant" class="text-danger">{{ errors.montant}}</span>
                 </div>
-                <div class="input-group mt-3">
+<!--                 <div class="input-group mt-3">
                     <label for="montant">TAUX</label>
-                    <input class="" type="number" :value='form.montant' @change='updateTaux'>
+                    <input class="" type="number" :value='form.taux' @change='updateTaux'>
                     <span v-if="errors.taux" class="text-danger">{{ errors.taux}}</span>
-                </div>
+                </div> -->
                 <div class="input-group mt-3">
-                    <label for="montant">TELEPHONE</label>
-                    <input class="" type="text" v-model="form.tel" name="">
-                    <span v-if="errors.tel" class="text-danger">{{ errors.tel}}</span>
+                    <label for="tel">TELEPHONE</label>
+                    <input type="number" placeholder="Enter Number" v-model="form.tel"  @input="change($event)" @change="change($event)"/>
                 </div>                
-                <div class="input-group mt-3">
+                    <div class="error" v-if="!isValid">Number is Invalid</div>
+<!--                 <div class="input-group mt-3">
                     <label for="status">STATUS</label>
                     <div class="control">
                         <select v-model="form.status">
-                          <option value="default">Default</option>
+                          <option value="defaut">Default</option>
                           <option value="appel">Appellé</option>
-                          <option value="servi">Servir</option>
+                          <option value="servi">Servi</option>
                         </select>
                     </div>
 
-                    <span v-if="errors.status" class="text-danger">{{ errors.status}}</span>
+                    <span v-if="errors.status" class="text-danger">{{ errors.status}}</span> -->
                 </div>               
                 <div class="input-group mt-3">
                     <label for="montant">MONTANT REEL</label>
-                    <input v-model='form.montant_fbu' class="" name="montant_fbu" placeholder="somme en fbu" type="number" step="any">
+                    <input :value='form.montant*form.taux' class="" name="montant_fbu" placeholder="somme reelle en fbu" type="number">
                     <span v-if="errors.montant_fbu" class="text-danger">{{ errors.montant_fbu}}</span>
                 </div>
                 <center>
@@ -64,14 +64,17 @@ export default {
                 nom : "",
                 montant : "",
                 montant_fbu :"",
-                taux :"",
-                tel : "",
-                status:''
+                // taux :"",
+                tel : ""
             },
+            isValid:true,
             depot_id:null,
             update:false,
             errors : {},
-            users : {}
+            users : {},
+            regex: /[0-9]/
+            // regex :/^(?:(?\+)61|62|69|71|72|79)[0-9](\d\d){4}$/
+
             
         }
     },
@@ -92,10 +95,10 @@ export default {
             this.form.montant=event.target.value
             this.form.montant_fbu = this.form.montant*this.form.taux
         },
-        updateTaux(e){
-            this.form.taux = e.target.value
-            this.form.montant_fbu = this.form.montant*this.form.taux
-        },
+        // updateTaux(e){
+        //     this.form.taux = e.target.value
+        //     this.form.montant_fbu = this.form.montant*this.form.taux
+        // },
         fetchData(){
             axios.get(this.$store.state.url+"/depot/", this.header )
                 .then(res => {
@@ -112,7 +115,7 @@ export default {
                 montant : this.form.montant,
                 montant_fbu : this.form.montant_fbu,
                 taux : this.form.taux,
-                status : this.form.status,
+                // status : this.form.status,
                 tel : this.form.tel
                },this.header
             ).then((response) => {
@@ -122,7 +125,6 @@ export default {
             }).catch((error) => {
               console.error(error);
             })                  
-
         },
         saveUpdateDepot(){
             axios.put(this.$store.state.url+"/depot/"+this.depot_id +"/", this.form, this.header)
@@ -133,24 +135,26 @@ export default {
             }).catch(err => {
                 console.error(err); 
             })
-
         },
-        Appeler(){
-
+        change(e){
+            const number=e.target.value
+            this.isNumberValid(number)
         },
-        Servir(){
-
+        isNumberValid(inputNumber){
+            this.isValid=this.regex.test(inputNumber)
         },
         emitClose(){
             this.$emit('close')
         }
-    }
 
+    }
 }
 </script>
 
 <style>
-
+.error{
+  color:red;
+}
 .input-group{
     display: flex;
     justify-content: space-around;

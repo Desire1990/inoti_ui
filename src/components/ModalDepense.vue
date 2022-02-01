@@ -10,7 +10,19 @@
                     <input class="" type="number" v-model="form.montant" name="">
                     <span v-if="errors.montant" class="text-danger">{{ errors.montant}}</span>
                 </div>
+<!--                 <div class="input-group mt-3">
+                    <label for="status">VALIDATE</label>
+                    <div class="control">
+                        <select v-model="form.validate">
+                          <option value="Attente">Attente</option>
+                          <option value="appel">Valide</option>
+                          <option value="Rejeté">Rejeté</option>
+                        </select>
+                    </div>
 
+                    <span v-if="errors.status" class="text-danger">{{ errors.status}}</span>
+                </div> 
+ -->
                 <div class="input-group mt-3">
                     <label for="montant">MOTIF</label>
                     <textarea class="" type="" v-model="form.motif" name=""/>
@@ -37,6 +49,7 @@ export default {
             form :{
                 montant : "",
                 motif : "",
+                validate:''
             },
             depot_id:null,
             update:false,
@@ -51,6 +64,7 @@ export default {
         if(this.updatedepot){
             this.form.montant=this.updatedepot.montant
             this.form.motif=this.updatedepot.motif
+            this.form.validate=this.updatedepot.validate
             this.depense_id=this.updatedepot.id
 
         }
