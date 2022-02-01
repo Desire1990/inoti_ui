@@ -3,25 +3,27 @@
     <table class="table table-light text-left" >
         <thead class="tr">
             <tr style='{background-color:pink;}' >
-                <th prop='id'>#</th> 
-                <th prop='montant'>MONTANT($)</th>
-                <th prop='nom'>NOM DU BENEFICIER</th> 
-                <th prop='tel'>TELEPHONE</th> 
-                <th prop='date'>DATE</th>                 
-                <th prop='montant_fbu'>MONTANT</th>
+                <th >#</th> 
+                <th>MONTANT($)</th>
+                <th>NOM DU BENEFICIER</th> 
+                <th>TELEPHONE</th> 
+                <th>DATE</th>                 
+                <th>MONTANT</th>
+                <th>COUNT</th>
                 <th v-if="$store.state.user.groups.includes('admin')">STATUS</th>
                 <th>ACTIONS</th> 
             </tr>
         </thead>
         <tbody>
-            <tr class="text-left" v-for="depot in depots.results" :key="depot.id" :class="classe[depot.status]">
+            <tr class="text-left" v-for="depot in depots.results" :key="depot.id" :class="classe[depot.is_valid]">
                 <td>{{ depot.id }}</td>
                 <td> {{ money(depot.montant)}} $</td>
                 <td>{{ depot.nom }}</td>
                 <td>{{ depot.tel }}</td>
                 <td>{{datetime(depot.date) }}</td>
                 <td> {{ money(depot.montant_fbu)}} Fbu</td>
-                <td v-if="$store.state.user.groups.includes('admin')">{{(depot.status) }}</td>                
+                <td> Servi {{ money(depot.counter)}} fois</td>
+                <td v-if="$store.state.user.groups.includes('admin')">{{(depot.is_valid) }}</td>                
                 
                 <td >
                 <div v-if="$store.state.user.groups.includes('admin')">
@@ -30,8 +32,8 @@
                 </div> 
                 <div v-else>
                     
-                    <button class="btn btn-info btn-sm ml-1 " v-on:click ="cellStyle(depot)"> Appeler</button>             
-                    <button class="btn btn-success btn-sm ml-1 " v-on:click =cellStyle(depot)>Servi</button>
+                    <button class="btn btn-info btn-sm ml-1 " @click.once ="appeler(depot); counter+=1"> Appeler</button>           
+                    <button class="btn btn-success btn-sm ml-1 "@click.once ='servir(depot)'>Servir</button>
                     
                 </div>
                 </td>
@@ -52,15 +54,12 @@ export default {
     data() {
         return {
             form :{
-                nom : "",
-                montant : "",
-                tel : "",
-                status:''
+                is_valid:''
             },
             classe:{
-                'default':'gold-star',
-                'servi':'silver-star',
-                'appel':'bronze-star'
+                'defaut':'gold-star',
+                'appel':'silver-star',
+                'servi':'bronze-star'
               },
             update:false,
             depots :[],
@@ -68,9 +67,8 @@ export default {
             clicked:false,
             servie:false,
             revele : false,
-            updatedepot:null
-
-            
+            updatedepot:null,
+            counter:0
         }
     },
     watch:{
@@ -119,50 +117,62 @@ export default {
             console.log(this.depot)
 
         },
+        Update2(depot){
+            this.update = true
+            this.updatedepot=depot
+            console.log(this.depot)
+
+        },
         DeleteDepot: function(dep) {
             if (confirm('Delete ' + dep.id)) {
                 axios.delete(this.$store.state.url+`/depot/${dep.id}`, {
                     headers :{
                         "Authorization" : `Bearer ${this.$store.state.user.access}`}
                     })
-                    .then( response => {
+                    .then( response => 
+                    {
                         this.fetchData()
                         return response
-                    });
-                }
-            },
-        cellStyle({row, column}){
-            if(column.property === 'status'){
-                switch(row.status) {
-                    case 'default':
-                        return {
-                            background: 'red',
-                            color: '#FFFFFF'
-                        };
-                        break;
-                    case 'servi':
-                        return {
-                            background: 'blue',
-                            color: '#FFFFFF'
-                        };
-                        break;
-                    case 'appel':
-                        return {
-                            background: 'yellow',
-                            color: '#FFFFFF'
-                        };
-                    break;
-                }
-          }
-        }
+                    }
+                );
+            }
+        },
+        appeler(dep){
+            if (confirm('êtes-vous sur d\'avoir appele ' + dep.nom)) {
+                axios.patch(this.$store.state.url+`/depot/${dep.id}`+'/',{
+                    is_valid:'appel'
+                }, this.header)
+                .then(response => {
+                    console.log(response.data)
+                    this.fetchData()
+                }).catch(err => {
+                    console.error(err); 
+                })
+            }
+
+        },
+        servir(dep){
+            if (confirm('êtes-vous sur d\'avoir servi ' + dep.nom)) {
+                axios.patch(this.$store.state.url+`/depot/${dep.id}`+'/',{
+                    is_valid : 'servi'
+                }, this.header)
+                .then(response => {
+                    console.log(response.data)
+                    this.fetchData()
+                }).catch(err => {
+                    console.error(err); 
+                })
+            }
+        },
+
+
     },
       
 }
 </script>
 <style>
-@import url("//unpkg.com/element-ui@2.4.11/lib/theme-chalk/index.css");
 .tr {
-    background-color: #20c997;
+    background-color: teal;
     text-align: left;
     color: white;
 }
