@@ -29,10 +29,15 @@
                     <h6>Depenses</h6>
                 </div>
             </router-link>
+<!--             <router-link to="/taux" active-class="active" tag="button" exact class="side-btn">
+                <div class="link-container">
+                    <h6>Taux</h6>
+                </div>
+            </router-link> -->
         </div>
+
     </div>
 </template>
-
 <script>
 export default {
   methods:{
@@ -40,7 +45,8 @@ export default {
       if (confirm("êtes vous sur de vouloir se deconnecter?")) {
         this.$store.state.user = null;
       }
-    }
+    },
+
   }
    
 }

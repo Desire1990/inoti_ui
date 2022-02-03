@@ -11,7 +11,8 @@ export default new Vuex.Store({
     depots: [],
     transactions: [],
     approvisions:[],
-    depenses:[]
+    depenses:[],
+    taux:[]
   },
   mutations: {
   },

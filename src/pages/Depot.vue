@@ -1,8 +1,10 @@
 <template>
-    <div>        
+    <div>
         <div class="text-right">
             <searchbar />
-            <hr>
+            <button style="background-color:darkred; color: white;" class="btn btn mt-3" @click="showModal" v-if="$store.state.user.groups.includes('admin')">Change le taux!</button>
+            <Modal v-show="isModalVisible" @close="closeModal" />
+
              <button style="background-color:teal; color: white;" class="btn btn mt-3" @click="toggleForm" v-if="$store.state.user.groups.includes('admin')">Nouveau transfer</button>
              <ModaleDepot v-if='new_depot' @close='close' v-bind:toggleForm="toggleForm"/>             
             <DepotList  class=" mt-3"/>
@@ -13,11 +15,13 @@
 import DepotList from '../components/DepotList.vue'
 import ModaleDepot from '../components/DepotModel.vue'
 import searchbar from '../components/SearchBar.vue'
+import Modal from '../components/modal.vue'
 export default {
-  components: { DepotList, ModaleDepot, searchbar },
+  components: { DepotList, ModaleDepot, searchbar, Modal },
     data(){
         return {           
-        new_depot : false
+        new_depot : false,
+        isModalVisible: false,
         }
     },
     computed:{
@@ -36,6 +40,12 @@ export default {
         },
         toggleForm(){
             this.new_depot =true
+        },
+        showModal() {
+          this.isModalVisible = true;
+        },
+        closeModal() {
+          this.isModalVisible = false;
         }
     }
 }

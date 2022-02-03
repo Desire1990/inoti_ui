@@ -25,6 +25,9 @@ const routes = [
       {
         path: 'transaction',
         component: () => import(/* webpackChunkName: "transaction" */ '../pages/Transaction.vue')
+      },      {
+        path: 'taux',
+        component: () => import(/* webpackChunkName: "transaction" */ '../components/Taux.vue')
       },
       {
         path: 'approvision',
