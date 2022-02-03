@@ -4,12 +4,13 @@
         <thead class="tr">
             <tr style='{background-color:pink;}' >
                 <th >#</th> 
-                <th>MONTANT($)</th>
+                <th v-if="$store.state.user.groups.includes('admin')">MONTANT($)</th>
                 <th>NOM DU BENEFICIER</th> 
                 <th>TELEPHONE</th> 
                 <th>DATE</th>                 
                 <th>MONTANT</th>
-                <th>COUNT</th>
+                <th v-if="$store.state.user.groups.includes('admin')">COUNT</th>
+                <th v-if="$store.state.user.groups.includes('admin')">TAUX</th>
                 <th v-if="$store.state.user.groups.includes('admin')">STATUS</th>
                 <th>ACTIONS</th> 
             </tr>
@@ -17,12 +18,13 @@
         <tbody>
             <tr class="text-left" v-for="depot in depots.results" :key="depot.id" :class="classe[depot.is_valid]">
                 <td>{{ depot.id }}</td>
-                <td> {{ money(depot.montant)}} $</td>
+                <td v-if="$store.state.user.groups.includes('admin')"> {{ money(depot.montant)}} $</td>
                 <td>{{ depot.nom }}</td>
                 <td>{{ depot.tel }}</td>
                 <td>{{datetime(depot.date) }}</td>
                 <td> {{ money(depot.montant_fbu)}} Fbu</td>
-                <td> Servi {{ money(depot.counter)}} fois</td>
+                <td v-if="$store.state.user.groups.includes('admin')"> Servi {{ money(depot.counter)}} fois</td>
+                <td v-if="$store.state.user.groups.includes('admin')"> {{ (depot.taux.taux)}}</td>
                 <td v-if="$store.state.user.groups.includes('admin')">{{(depot.is_valid) }}</td>                
                 
                 <td >
@@ -57,9 +59,9 @@ export default {
                 is_valid:''
             },
             classe:{
-                'defaut':'gold-star',
-                'appel':'silver-star',
-                'servi':'bronze-star'
+                defaut:'gold-star',
+                appel:'silver-star',
+                servi:'bronze-star'
               },
             update:false,
             depots :[],
@@ -112,12 +114,6 @@ export default {
             this.update=false
         },
         Update(depot){
-            this.update = true
-            this.updatedepot=depot
-            console.log(this.depot)
-
-        },
-        Update2(depot){
             this.update = true
             this.updatedepot=depot
             console.log(this.depot)
@@ -177,22 +173,18 @@ export default {
     color: white;
 }
 .gold-star {
-  background-color: #ffee58;
-  color:white ;
+  background-color:white;
+  color:black ;
 }
 
 .silver-star {
-  background-color: #BDBDBD;
-  color:white ;
+  background-color: green;
+  color:black ;
 }
 
 .bronze-star {
-  background-color: #cd7f32;
-  color:white ;
+  background-color: yellow;
+  color:black ;
 }
 
-.change-rank{
-  background-color: #00C853;
-  color:white ;
-}
 </style>
