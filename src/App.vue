@@ -34,6 +34,6 @@ export default{
         localStorage.setItem('user', JSON.stringify(new_user));
       }
     }
-  }
+  },
 };
 </script>
