@@ -135,10 +135,8 @@ export default {
     }
 }
 </script>
-<style scoped>
-@import url(//fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700,800);
+<style>
 .pricing6 {
-  font-family: "Montserrat", sans-serif;
   color: #8d97ad;
   font-weight: 300;
 }

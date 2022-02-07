@@ -1,17 +1,18 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import dashboard from '../pages/Dashboard'
+import login from '../pages/Login.vue'
+import depot from '../pages/Depot.vue'
+import dashboard from '../pages/Dashboard.vue'
+import taux from '../components/Taux.vue'
+import approvision from '../pages/Approvision.vue'
+import depense from '../pages/Depenses.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
-  {
-    path: '',
-    component: dashboard,
-    children: [
       {
         path: '',
-        component: () => import(/* webpackChunkName: "Overview" */ '../pages/Overview.vue')
+        component: () => import(/* webpackChunkName: "Dashboard" */ '../pages/Dashboard.vue')
       },
       {
         path: '/login',
@@ -19,27 +20,22 @@ const routes = [
         component: () => import('../pages/Login.vue')
       },
       {
-        path: 'depot',
+        path: '/depot',
         component: () => import(/* webpackChunkName: "depot" */ '../pages/Depot.vue')
       },
       {
-        path: 'transaction',
-        component: () => import(/* webpackChunkName: "transaction" */ '../pages/Transaction.vue')
-      },      {
-        path: 'taux',
+        path: '/taux',
         component: () => import(/* webpackChunkName: "transaction" */ '../components/Taux.vue')
       },
       {
-        path: 'approvision',
+        path: '/approvision',
         component: () => import(/* webpackChunkName: "Approvision" */ '../pages/Approvision.vue')
       },
       {
-        path: 'depense',
+        path: '/depense',
         component: () => import(/* webpackChunkName: "Depenses" */ '../pages/Depenses.vue')
       },
-      { path: "*", redirect: "/"}
-    ]
-  }
+      // { path: "*", redirect: "/"}
 ]
 
 const router = new VueRouter({
