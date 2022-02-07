@@ -1,6 +1,6 @@
-<template v-slot:defaul>
-    <div>
-    <table class="table table-light text-left" >
+<template>
+<div class="table-responsive">
+  <table class="table">
         <thead class="tr">
             <tr style='{background-color:pink;}' >
                 <th >#</th> 
@@ -41,7 +41,7 @@
                 </td>
             </tr>
         </tbody> 
-    </table>
+  </table>
     <ModaleDepot v-if="update"  :updatedepot="updatedepot" @close="close"></ModaleDepot>
     </div>
 
@@ -166,7 +166,7 @@ export default {
       
 }
 </script>
-<style>
+<style scoped>
 .tr {
     background-color: teal;
     text-align: left;

@@ -108,7 +108,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 
 .input-group{
     display: flex;
