@@ -154,7 +154,7 @@ export default {
         }
     }
 </script>
-<style>
+<style scoped>
 .tr {
     background-color: #20c997;
     text-align: left;
