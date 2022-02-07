@@ -4,11 +4,8 @@ import store from "./store"
 import router from './router'
 import "bootstrap/dist/css/bootstrap.min.css"
 import "font-awesome/css/font-awesome.min.css"
-import '@/assets/css/main.css'
-
+import '@/main.css'
 Vue.config.productionTip = false
-
-
 Vue.mixin({
 	computed:{
         header(){
@@ -37,9 +34,6 @@ Vue.mixin({
 		}
 	},
 })
-
-
-
 new Vue({
 	router,
 	store,

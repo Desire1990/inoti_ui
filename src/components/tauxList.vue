@@ -119,7 +119,7 @@ export default {
       
 }
 </script>
-<style>
+<style scoped>
 .tr {
     background-color: teal;
     text-align: left;
