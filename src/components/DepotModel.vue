@@ -13,7 +13,7 @@
 
                 <div class="input-group mt-3">
                     <label for="montant">MONTANT</label>
-                    <input class="" type="number" v-model='form.montant'>
+                    <input class="" type="number" :value='form.montant' @change='updateMontant'>
                     <span v-if="errors.montant" class="text-danger">{{ errors.montant}}</span>
                 </div>
                 <div class="input-group mt-3">
@@ -40,8 +40,8 @@ export default {
         return {
             form :{
                 nom : "",
-                montant : "",
-                montant_fbu :0,
+                montant :'',
+                taux:'',
                 tel : ""
             },
             isValid:true,
@@ -69,12 +69,9 @@ export default {
     methods: {
         updateMontant(event){
             this.form.montant=event.target.value
-            this.form.montant_fbu = this.form.montant*this.form.taux
+            this.form.montant_fbu = this.form.montant*this.form.taux.taux
         },
-        updateTaux(e){
-            this.form.taux = e.target.value
-            this.form.montant_fbu = this.form.montant*this.form.taux
-        },
+
         fetchData(){
             axios.get(this.$store.state.url+"/depot/", this.header )
                 .then(res => {
