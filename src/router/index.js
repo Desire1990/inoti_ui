@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import login from '../pages/Login.vue'
 import depot from '../pages/Depot.vue'
-import dashboard from '../pages/Dashboard.vue'
+import overview from '../pages/Overview.vue'
 import taux from '../components/Taux.vue'
 import approvision from '../pages/Approvision.vue'
 import depense from '../pages/Depenses.vue'
@@ -12,7 +12,7 @@ Vue.use(VueRouter)
 const routes = [
       {
         path: '',
-        component: () => import(/* webpackChunkName: "Dashboard" */ '../pages/Dashboard.vue')
+        component: () => import(/* webpackChunkName: "Overview" */ '../pages/Overview.vue')
       },
       {
         path: '/login',
