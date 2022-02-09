@@ -48,12 +48,12 @@ export default{
     background-color: teal;
     height: 100vh;
     width: 100vw;
-    position: fixed;
+    position: !important;
 }
 
 .content {
     background-color: white;
-    border-radius: 10px;
-    margin: 6px 6px 6px 0px;
+    border-radius: 0px;
+    margin: 0px;
 }
 </style>
