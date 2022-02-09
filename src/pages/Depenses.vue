@@ -2,7 +2,7 @@
     <div>        
         <div class="text-right">
             <searchbar />
-             <button class="btn btn-primary mt-3" @click="toggleForm">Nouvelle depense</button>
+             <button class="btn btn-primary mt-3" @click="toggleForm" >Nouvelle depense</button>
              <ModalDepense v-if='new_depot' @close='close' v-bind:toggleForm="toggleForm"/>             
             <DepenseList  class=" mt-3"/>
         </div>
