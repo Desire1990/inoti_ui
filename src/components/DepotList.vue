@@ -2,7 +2,7 @@
 <div class="table-responsive">
   <table class="table">
         <thead class="tr">
-            <tr style='{background-color:pink;}' >
+            <tr style={background-color:pink;} >
                 <th >#</th> 
                 <th v-if="$store.state.user.groups.includes('admin')">MONTANT($)</th>
                 <th>NOM DU BENEFICIER</th> 
@@ -24,7 +24,7 @@
                 <td>{{datetime(depot.date) }}</td>
                 <td> {{ money(depot.montant_fbu)}} Fbu</td>
                 <td v-if="$store.state.user.groups.includes('admin')"> Servi {{ money(depot.counter)}} fois</td>
-                <td v-if="$store.state.user.groups.includes('admin')"> {{ (depot.taux.taux)}}</td>
+                <td v-if="$store.state.user.groups.includes('admin')"> {{ money(depot.taux.taux)}} Fbu</td>
                 <td v-if="$store.state.user.groups.includes('admin')">{{(depot.is_valid) }}</td>                
                 
                 <td >
@@ -42,6 +42,13 @@
             </tr>
         </tbody> 
   </table>
+  <center>
+      <div class="buttons">
+        <button class="button is-light" @click="goToPreviousPage()" v-if="showPreviousButton">Previous</button>
+        <button class="button is-light" @click="goToNextPage()" v-if="showNextButton">Next</button>
+    </div>
+      
+  </center>
     <ModaleDepot v-if="update"  :updatedepot="updatedepot" @close="close"></ModaleDepot>
     </div>
 
@@ -70,8 +77,13 @@ export default {
             servie:false,
             revele : false,
             updatedepot:null,
-            counter:0
-        }
+            counter:0,
+            showNextButton: false,
+            showPreviousButton: false,
+            currentPage: 1,
+            num_depot :0,
+            query: '',
+    }
     },
     watch:{
         "$store.state.depots"(new_val){
@@ -81,14 +93,15 @@ export default {
     mounted() {
         axios.get(this.$store.state.url+"/depot/", this.header )
         .then(res => {
-            this.$store.state.depots = res.data          
+            this.$store.state.depots = res.data
             console.log(res.data.results);
         })
         .catch(err => {
-            console.error(err); 
+            console.error(err);
         })
-        
+
     },
+
     computed:{
         header(){
             return{
@@ -110,6 +123,15 @@ export default {
                 console.error(err); 
             })           
         },
+        goToNextPage() {
+            this.currentPage += 1
+            this.fetchData() 
+        },
+        goToPreviousPage() {
+            this.currentPage -= 1
+            this.fetchData()
+        },
+
         close(){
             this.update=false
         },
@@ -126,8 +148,17 @@ export default {
                         "Authorization" : `Bearer ${this.$store.state.user.access}`}
                     })
                     .then( response => 
+                        
                     {
-                        this.fetchData()
+                        this.fetchData(),
+                        toast({
+                            message: dep.id+' was deleted',
+                            type: 'is-success',
+                            dismissible: true,
+                            pauseOnHover: true,
+                            duration: 2000,
+                            position: 'bottom-right',
+                        })
                         return response
                     }
                 );
