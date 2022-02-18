@@ -73,9 +73,3 @@ export default {
     }
 };
 </script>
-<style>
-    .login{
-        background-image: url('../assets/doll.jpeg');
-        color:#000;
-    }
-</style>

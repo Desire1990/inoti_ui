@@ -22,6 +22,7 @@ export default {
         return {           
         new_depot : false,
         isModalVisible: false,
+        visible:false
         }
     },
     computed:{

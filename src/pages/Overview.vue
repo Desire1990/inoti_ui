@@ -8,9 +8,9 @@
       </div>
     </div>
     <!-- row  -->
-    <div class="row mt-4" >
+    <div class="row mt-4 ml-5" style="height: 100%; width:90%"  >
       <!-- column  -->
-      <div class="col-md-6" v-if="$store.state.user.groups.includes('admin')">
+      <div class="col-md-6 " v-if="$store.state.user.groups.includes('admin')">
         <div class="card card-shadow border-0 mb-4">
           <div class="card-body p-4">
             <div class="d-flex align-items-center">
@@ -59,7 +59,7 @@
       </div>
       <!-- column  -->
       <!-- column  -->
-      <div class="col-md-6" v-else>
+      <div class="col-md-8 ml-6" style="height: 100%; width:90%"  v-else>
         <div class="card card-shadow border-0 mb-4">
           <div class="card-body p-4">
             <div class="d-flex align-items-center">
