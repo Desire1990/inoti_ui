@@ -1,32 +1,37 @@
-<template>
+ <template>
     <div>
     <table class="table table-light text-left" >
         <thead class="tr">
             <tr>
                 <th>#</th> 
-                <th>MONTANT</th> 
+                <th v-if="$store.state.user.groups.includes('admin')">MONTANT</th> 
                 <th>DATE</th> 
-                <th>MONTANTRECU</th>
+                <th>MONTANT RECU</th>
+                <th>STATUS</th>
                 <th>ACTIONS</th> 
             </tr>
         </thead>
         <tbody>
-            <tr class="text-left" v-for="depot in approvisions.results" :key="depot.id">
-                <td>{{ depot.id }}</td>
-                <td>{{ money(depot.montant)}} $</td>
+            <tr class="text-left" v-for="(depot,index) in approvisions.results" :key="depot.id" :class="classe[depot.validate]">
+                <td>{{ index+1 }}</td>
+                <td v-if="$store.state.user.groups.includes('admin')">{{ money(depot.montant)}} $</td>
                 <td>{{datetime(depot.date) }}</td>
                 <td> {{ money(depot.montant_recu) }} Fbu</td>
-                <td><button class="btn btn-info btn-sm ml-1" @click="Update(depot)">
+                <td> {{ (depot.validate) }}</td>
+                <td><button class="btn btn-info btn-sm ml-1" @click="Update(depot)" v-if="$store.state.user.groups.includes('admin')">
                     Modifier
                 </button>
-                <button class="btn btn-danger btn-sm ml-1" v-on:click="DeleteApprovision(depot)">
+                <button class="btn btn-danger btn-sm ml-1" v-on:click="DeleteApprovision(depot)" v-if="$store.state.user.groups.includes('admin')">
                     Effacer
+                </button>
+                <button v-else class="btn btn-info btn-sm ml-1" v-on:click="Valider(depot)">
+                    Valider
                 </button>
                 </td>
             </tr>
         </tbody> 
     </table>
-        <ModaleApprovision v-if="update"  :updatedepot="updatedepot" @close="close"></ModaleApprovision>
+        <ModaleApprovision v-if="update"  :updateApprovision="updateApprovision" @close="close"></ModaleApprovision>
     </div>
 </template>
 
@@ -43,10 +48,14 @@ export default {
                 nom : "",
                 amount : "",
             },
+            classe:{
+                Attente:'gold-star',
+                Validé:'bronze-star'
+            },
             update:false,
             selectedDepot : null,
             approvisions : this.$store.state.approvisions,
-            updatedepot:null
+            updateApprovision:null
             
         }
     }, 
@@ -92,13 +101,13 @@ export default {
         },
         Update(depot){
             this.update=true
-            this.updatedepot=depot
+            this.updateApprovision=depot
             console.log(this.depot)
         },
 
-        DeleteApprovision: function(trans) {
-            if (confirm('Delete ' + trans.id)) {
-                axios.delete(this.$store.state.url+`/approvision/${trans.id}`, {
+        DeleteApprovision: function(depense) {
+            if (confirm('Delete ' + depense.id)) {
+                axios.delete(this.$store.state.url+`/approvision/${depense.id}`, {
                     headers :{
                         "Authorization" : `Bearer ${this.$store.state.user.access}`}
                     })
@@ -107,8 +116,23 @@ export default {
                         return response   
                     });
                 }
+            }, 
+        Valider(approvision){
+            if (confirm('êtes-vous sur de vouloir valider l\'appprovision' + approvision.id)) {
+                axios.patch(this.$store.state.url+`/approvision/${approvision.id}`+'/',{
+                    validate : 'Validé'
+                }, this.header)
+                .then(response => {
+                    console.log(response.data)
+                    this.fetchData()
+                }).catch(err => {
+                    console.error(err); 
+                })
             }
         },
+
+
+    }
       
 }
 </script>
@@ -118,4 +142,14 @@ export default {
     text-align: left;
     text-decoration-color: white;
 }
+.gold-star {
+  background-color:white;
+  color:black ;
+}
+
+.bronze-star {
+  background-color: teal;
+  color:white ;
+}
+
 </style>
