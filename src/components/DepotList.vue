@@ -16,8 +16,9 @@
             </tr>
         </thead>
         <tbody>
-            <tr class="text-left" v-for="depot in depots.results" :key="depot.id" :class="classe[depot.is_valid]">
-                <td>{{ depot.id }}</td>
+            <tr class="text-left" v-for="(depot, index) in depots.results" :key="depot.id" :class="classe[depot.is_valid]">
+               
+                <td>{{ index+1 }}</td>
                 <td v-if="$store.state.user.groups.includes('admin')"> {{ money(depot.montant)}} $</td>
                 <td>{{ depot.nom }}</td>
                 <td>{{ depot.tel }}</td>

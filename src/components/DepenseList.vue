@@ -1,4 +1,4 @@
-<template>
+ <template>
     <div>
     <table class="table table-light text-left" >
         <thead class="tr">
@@ -10,10 +10,10 @@
                 <th>STATUS</th>
                 <th>ACTIONS</th>
             </tr>
-        </thead>
+        </thead> 
         <tbody>
-            <tr class="text-left" v-for="depens in depenses.results" :key="depens.id" :class="classe[depens.validate]">
-                <td>{{ depens.id }}</td>
+            <tr class="text-left" v-for="(depens, index) in depenses.results" :key="depens.id" :class="classe[depens.validate]">
+                <td>{{ index+1 }}</td>
                 <td> {{ money(depens.montant)}}</td>
                 <td>{{datetime(depens.date)}}</td>
                 <td>{{(depens.motif)}}</td>
@@ -21,18 +21,18 @@
                 <td>
                 <button class="btn btn-success btn-sm ml-1" v-on:click.once="valider(depens)" v-if='$store.state.user.groups.includes("admin")'>
                     valider
-                </button> 
+                </button>
                 <button class="btn btn-success btn-sm ml-1" v-on:click.once="rejeter(depens)" v-if='$store.state.user.groups.includes("admin")'>
                     rejeter
-                </button> 
-                    <button v-else class="btn btn-danger btn-sm ml-1 " @click="DeleteDepot(depens)">
+                </button>
+                    <button v-else class="btn btn-danger btn-sm ml-1 " @click="Delete(depens)">
                     Delete
                 </button >
                 </td>
             </tr>
         </tbody>
     </table>
-    <ModalDepense v-if = 'update' :updatedepot="updatedepot" @close='close'/>
+    <ModalDepense v-if = 'update' :updatedepense="updatedepense" @close='close'/>
     </div>
 </template>
 
@@ -54,13 +54,13 @@ export default {
                 'Rejeté':'bro-star'
               },
             update:false,
-            updatedepot:null,
+            updatedepense:null,
             depenses : this.$store.state.depenses
 
         }
     },
     watch:{
-        "$store.state.depenses"(new_val){ 
+        "$store.state.depenses"(new_val){
             this.depenses = new_val
         }
     },
@@ -88,71 +88,63 @@ export default {
         fetchData(){
             axios.get(this.$store.state.url+"/depense/", this.header )
             .then(res => {
-                this.$store.state.depenses = res.data          
+                this.$store.state.depenses = res.data
                 console.log(res.data.results);
             })
             .catch(err => {
-                console.error(err); 
-            })           
+                console.error(err);
+            })
         },
         close(){
             this.update=false
         },
-        Update(depot){
+        Update(depense){
             this.update = true
-            this.updatedepot=depot
-            console.log(this.depot)
+            this.updatedepense=depense
+            console.log(this.depense)
 
         },
-        DeleteDepot: function(dep) {
-            if (confirm('Delete ' + dep.id)) {
-                axios.delete(this.$store.state.url+`/depense/${dep.id}`, {
+        Delete(depense) {
+            if (confirm('Delete ' + depense.id)) {
+                axios.delete(this.$store.state.url+`/depense/${depense.id}`, {
                     headers :{
-                        "Authorization" : `Bearer ${this.$store.state.user.access}`}
-                    })
+                        "Authorization" : `Bearer ${this.$store.state.user.access}`
+
+                    }})
                     .then( response => {
                         this.fetchData()
                         return response
                     });
                 }
-            },
-        valider(dep){
-            if (confirm('êtes-vous sur de vouloir valider le depense de ' + dep.montant)) {
-                axios.patch(this.$store.state.url+`/depense/${dep.id}`+'/',{
-                    validate:'Validé'
-                }, this.header)
-                .then(response => {
-                    const compte =(dep.account.montant_burundi)
-                    const fees = (dep.montant)
-                    const x = this.compte-this.fees
-                    console.log(this.x)
-                    axios.patch(this.$store.state.url+`/compte/`,{
-                        montant_burundi:this.x
-                        }, this.header)
-                    this.fetchData(dep.account.montant_burundi-=dep.montant)
-                    return response
-                }).catch(err => {
-                    console.error(err); 
-                })
-            }
-        },         
-        rejeter(dep){
-            if (confirm('êtes-vous sur de vouloir rejeter le depense de ' + dep.montant)) {
-                axios.patch(this.$store.state.url+`/depense/${dep.id}`+'/',{
+        },
+        rejeter(depense){
+            if (confirm('êtes-vous sur de vouloir rejeter le depense de ' + depense.montant)) {
+                axios.patch(this.$store.state.url+`/depense/${depense.id}`+'/',{
                     validate:'Rejeté'
                 }, this.header)
                 .then(response => {
                     console.log(response.data)
                     this.fetchData()
-                    return response
                 }).catch(err => {
                     console.error(err); 
                 })
             }
-
-        },          
-        }
+        },        
+        valider(depense){
+            if (confirm('êtes-vous sur de vouloir valider le depense de ' + depense.montant)) {
+                axios.patch(this.$store.state.url+`/depense/${depense.id}`+'/',{
+                    validate:'Validé'
+                }, this.header)
+                .then(response => {
+                    console.log(response.data)
+                    this.fetchData()
+                }).catch(err => {
+                    console.error(err); 
+                })
+            }
+        }, 
     }
+}
 </script>
 <style scoped>
 .tr {

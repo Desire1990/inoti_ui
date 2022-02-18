@@ -4,6 +4,12 @@
         <div class="modale card ">
             <div class="btn btn-danger close-btn" @click="emitClose">X</div>
             <div class="card-modal mt-4">
+            <div v-if="updatedepot"><center>
+                <h4 class="desos">Modifier transfer</h4>
+            </center></div>
+            <div v-else><center>
+                <h4 class="desos">Nouveau transfer</h4>
+            </center></div><hr>
 
                 <div class="input-group mt-3">
                     <label for="montant">NOM</label>
@@ -23,8 +29,8 @@
                     <div class="error" v-if="!isValid">Number is Invalid</div>
                 <center>
                 <div class="input-group mt-3" >
-                    <button v-if="updatedepot" @click="saveUpdateDepot">Modifier</button>
-                    <button v-else @click="depot">Valider</button>
+                    <button style="background-color: teal; color: white;" v-if="updatedepot" @click="saveUpdateDepot">Modifier</button>
+                    <button style="background-color: teal; color: white;" v-else @click="depot">Valider</button>
                 </div>
                 </center>
             </div>
@@ -113,12 +119,23 @@ export default {
             const number=e.target.value
             this.isNumberValid(number)
         },
-        isNumberValid(inputNumber){
-            this.isValid=this.regex.test(inputNumber)
-        },
+
         emitClose(){
             this.$emit('close')
-        }
+        },
+        regexPhoneNumber(str) {
+            const regexPhoneNumber = /^((\+)257|0)[1-9](\d{2}){4}$/; 
+          
+            if (str.match(regexPhoneNumber)) {
+                return true;
+            } else {
+                return false;
+            }
+        },
+        isNumberValid(inputNumber){
+            let phoneNumber = "+257777777777";
+            console.log(regexPhoneNumber(phoneNumber));
+        },
 
     }
 }
@@ -166,10 +183,8 @@ export default {
 
 .modale{
     position:fixed;
-    top:30%;
+    top:10%;
     height: auto;
-
-     
 }
 .card-modal
 {
@@ -186,4 +201,9 @@ export default {
     cursor:pointer;
    
 }
+/*.desos{
+    background-color: teal;
+    color: white;
+    width: 70%;
+}*/
 </style>
