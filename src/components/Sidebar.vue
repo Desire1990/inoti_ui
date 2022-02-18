@@ -19,7 +19,7 @@
                 </div>
             </router-link>
 
-            <router-link to="/approvision" active-class="active" tag="button" exact class="side-btn" v-if="$store.state.user.groups.includes('admin')">
+            <router-link to="/approvision" active-class="active" tag="button" exact class="side-btn">
                 <div class="link-container">
                     <h6>Approvision</h6>
                 </div>
@@ -100,7 +100,7 @@ export default {
 .side-btn.active::after {
     bottom: -30px;
 }
-
+/*
 .side-btn.active::before, .side-btn.active::after {
     position: absolute;
     content: "";
@@ -127,5 +127,5 @@ export default {
     width: 60px;
     border-radius: 50%;
     background-color: teal;
-}
+}*/
 </style>

@@ -4,7 +4,7 @@
         <div class="text-right">
             <searchbar />
              <button class="btn btn-primary mt-3" @click="toggleForm">Nouvel approvision</button>
-             <ModalApprovision v-if='new_depot' @close='close' v-bind:toggleForm="toggleForm"/>             
+             <ModalApprovision v-if='new_approvision' @close='close' v-bind:toggleForm="toggleForm"/>             
             <ApprovisionList class=" mt-3"/>
         </div>
     </div>
@@ -19,7 +19,7 @@ export default {
     data(){
         return {
            
-        new_depot : false
+        new_approvision : false
         } 
     },
     mounted() {
@@ -36,11 +36,11 @@ export default {
     },
     methods: {
         close(){
-            this.new_depot=false
+            this.new_approvision=false
         },
 
         toggleForm(){
-            this.new_depot = true
+            this.new_approvision = true
         }
     }
 }

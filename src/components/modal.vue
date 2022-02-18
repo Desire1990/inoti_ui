@@ -4,7 +4,12 @@
         <div class="modale card ">
             <div class="btn btn-danger close-btn" @click="emitClose">X</div>
             <div class="card-modal mt-4">
-
+            <div v-if="updatedepot"><center>
+                <h4>Modifier transfer</h4>
+            </center></div>
+            <div v-else><center>
+                <h4>Nouveau transfer</h4>
+            </center></div><hr>
                 <div class="input-group mt-3">
                     <label for="montant">TAUX</label>
                     <input class="" type="text" v-model="form.taux" name="">
@@ -12,8 +17,8 @@
                 </div>
                 <center>
                 <div class="input-group mt-3" >
-                    <button v-if="updatedepot" @click="saveUpdateDepot">Modifier</button>
-                    <button v-else @click="depot">Valider</button>
+                    <button style="background-color: teal; color: white;" v-if="updatedepot" @click="saveUpdateDepot">Modifier</button>
+                    <button style="background-color: teal; color: white;" v-else @click="depot">Valider</button>
                 </div>
                 </center>
             </div>
@@ -127,13 +132,10 @@ export default {
     background: rgba(0, 0, 0, 0.5);
 
 }
-
 .modale{
     position:fixed;
-    top:30%;
+    top:10%;
     height: auto;
-
-     
 }
 .card-modal
 {

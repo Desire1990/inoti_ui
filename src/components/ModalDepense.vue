@@ -1,10 +1,15 @@
-<template>
+ <template>
     <div class="bloc-modale" >
         <div class="overlay"> </div>
         <div class="modale card ">
             <div class="btn btn-danger close-btn" @click="emitClose">X</div>
             <div class="card-modal mt-4">
-
+            <div v-if="updatedepense"><center>
+                <h4>Modifier la depense</h4>
+            </center></div>
+            <div v-else><center>
+                <h4>Nouvelle depense</h4>
+            </center></div><hr>
                 <div class="input-group mt-3">
                     <label for="montant">MONTANT</label>
                     <input class="" type="number" v-model="form.montant" name="">
@@ -31,8 +36,8 @@
               
                 <center>
                 <div class="input-group mt-3">
-                    <button v-if="updatedepot" @click="saveUpdateDepot">Modifier</button>
-                    <button v-else @click="depot">Valider</button>
+                    <button style="background-color: teal; color: white;" v-if="updatedepense" @click="saveUpdate">Modifier</button>
+                    <button style="background-color: teal; color: white;" v-else @click="depot">Valider</button>
                 </div>
                 </center>
             </div>
@@ -43,7 +48,7 @@
 <script>
 import axios from "axios"
 export default {
-    props:{updatedepot:Object},
+    props:{updatedepense:Object},
     data() {
         return {
             form :{
@@ -61,14 +66,14 @@ export default {
     },
 
     mounted() {
-        if(this.updatedepot){
-            this.form.montant=this.updatedepot.montant
-            this.form.motif=this.updatedepot.motif
-            this.form.validate=this.updatedepot.validate
-            this.depense_id=this.updatedepot.id
+        if(this.updatedepense){
+            this.form.montant=this.updatedepense.montant
+            this.form.motif=this.updatedepense.motif
+            this.form.validate=this.updatedepense.validate
+            this.depense_id=this.updatedepense.id
 
         }
-        console.log(this.updatedepot)         
+        console.log(this.updatedepense)         
     },
    
     computed:{
@@ -103,7 +108,7 @@ export default {
             })                  
 
         },
-        saveUpdateDepot(){
+        saveUpdate(){
             axios.put(this.$store.state.url+"/depense/"+this.depense_id +"/", this.form, this.header
             ).then((response) => {
                     console.log(response.data)
@@ -162,10 +167,8 @@ export default {
 
 .modale{
     position:fixed;
-    top:30%;
+    top:10%;
     height: auto;
-
-     
 }
 .card-modal
 {

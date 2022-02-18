@@ -10,14 +10,14 @@
             </tr>
         </thead>
         <tbody>
-            <tr class="text-left" v-for="taux in taux.results" :key="taux.id" :class="classe[taux.is_valid]">
-                <td>{{ taux.id }}</td>
-                <td>{{ money(taux.taux )}} Fbu</td>
-                <td>{{ datetime(taux.date) }}</td>
+            <tr class="text-left" v-for="(t, index) in taux.results " :key="t.id" :class="classe[t.is_valid]">
+                <td>{{ index+1 }}</td>
+                <td>{{ money(t.taux)}} Fbu</td>
+                <td>{{ datetime(t.date) }}</td>
                 
                 <td >
-                    <button class="btn btn-info btn-sm ml-1 " @click="Update(taux)" >Modifier </button>
-                    <button class="btn btn-danger btn-sm ml-1" v-on:click="DeleteDepotTaux(taux)">Effacer</button> 
+                    <button class="btn btn-info btn-sm ml-1 " @click="Update(t)" >Modifier </button>
+                    <button class="btn btn-danger btn-sm ml-1" v-on:click="DeleteTaux(t)">Effacer</button> 
                 </td>
             </tr>
         </tbody> 
@@ -99,7 +99,7 @@ export default {
             console.log(this.depot)
 
         },
-        DeleteDepotTaux(dep) {
+        DeleteTaux(dep) {
             if (confirm('Delete ' + dep.id)) {
                 axios.delete(this.$store.state.url+`/taux/${dep.id}`, {
                     headers :{
