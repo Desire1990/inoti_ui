@@ -6,6 +6,7 @@ export default new Vuex.Store({
     user: null,
     // url:"/api",
     url: 'http://localhost:8000/api',
+    // url:'https://inoti.amidev.bi/api',
     account:[],
     depots: [],
     transactions: [],

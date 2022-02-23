@@ -1,6 +1,7 @@
 <template>
     <div>        
         <div class="text-right">
+            <br>
             <searchbar />
              <button class="btn btn-primary mt-3" @click="toggleForm" >Nouvelle depense</button>
              <ModalDepense v-if='new_depense' @close='close' v-bind:toggleForm="toggleForm"/>             
