@@ -5,10 +5,10 @@
             <div class="btn btn-danger close-btn" @click="emitClose">X</div>
             <div class="card-modal mt-4">
             <div v-if="updatedepot"><center>
-                <h4>Modifier transfer</h4>
+                <h4>Modifier taux</h4>
             </center></div>
             <div v-else><center>
-                <h4>Nouveau transfer</h4>
+                <h4 class="col-md-8 mt-4 p-2" style="background-color: teal; color: white;" >Nouveau taux</h4>
             </center></div><hr>
                 <div class="input-group mt-3">
                     <label for="montant">TAUX</label>
@@ -92,11 +92,8 @@ export default {
     }
 }
 </script>
-
 <style scoped>
-.error{
-  color:red;
-}
+
 .input-group{
     display: flex;
     justify-content: space-around;

@@ -5,6 +5,11 @@ import router from './router'
 import "bootstrap/dist/css/bootstrap.min.css"
 import "font-awesome/css/font-awesome.min.css"
 import '@/main.css'
+
+import VeeValidate from 'vee-validate'
+
+Vue.use(VeeValidate)
+
 Vue.config.productionTip = false
 Vue.mixin({
 	computed:{

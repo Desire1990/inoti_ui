@@ -10,7 +10,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr class="text-left" v-for="(t, index) in taux.results " :key="t.id" :class="classe[t.is_valid]">
+            <tr class="text-left" v-for="(t, index) in taux.results " :key="t.id">
                 <td>{{ index+1 }}</td>
                 <td>{{ money(t.taux)}} Fbu</td>
                 <td>{{ datetime(t.date) }}</td>
@@ -39,10 +39,6 @@ export default {
                 taux:''
             },
             classe:{
-                'defaut':'gold-star',
-                'appel':'silver-star',
-                'servi':'bronze-star'
-              },
             update:false,
             taux :[],
             selectedDepot : null,
@@ -51,6 +47,7 @@ export default {
             revele : false,
             updatedepot:null,
             counter:0
+            }
         }
     },
     watch:{
