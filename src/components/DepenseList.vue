@@ -46,7 +46,7 @@ export default {
     data() {
         return {
             form:{
-                validate:''
+                validate:'',
             },
             classe:{
                 'Validé':'gold-star',
@@ -85,6 +85,20 @@ export default {
 		},
     },
     methods: {
+        getAll(){
+              if (this.search_term!==''||this.search_term!=null){
+                api_url=this.$store.state.url+`/depot/?search=${this.search_term}`
+              }
+              this.loading=true
+              this.$http.get(api_url)
+              .then((response) => {
+                this.depots=response.data
+                this.loading=false
+              }).catch((error) => {
+                this.loading=false
+                console.error(error);
+              })
+            },
         fetchData(){
             axios.get(this.$store.state.url+"/depense/", this.header )
             .then(res => {

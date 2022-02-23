@@ -41,12 +41,12 @@
                 </div>
                 </td>
             </tr>
-        </tbody> 
+        </tbody>
   </table>
   <center>
       <div class="buttons">
-        <button class="button is-light" @click="goToPreviousPage()" v-if="showPreviousButton">Previous</button>
-        <button class="button is-light" @click="goToNextPage()" v-if="showNextButton">Next</button>
+        <button class="button is-light" @click="loadPrev()" v-if="showPrevButton">Previous</button>
+        <button class="button is-light" @click="loadNext()" v-if="showNextButton">Next</button>
     </div>
       
   </center>
@@ -79,12 +79,13 @@ export default {
             revele : false,
             updatedepot:null,
             counter:0,
-            showNextButton: false,
-            showPreviousButton: false,
             currentPage: 1,
             num_depot :0,
             query: '',
-    }
+            currentPage: 1,
+            showNextButton: true,
+            showPrevButton: true
+}
     },
     watch:{
         "$store.state.depots"(new_val){
@@ -92,15 +93,7 @@ export default {
         }
     },
     mounted() {
-        axios.get(this.$store.state.url+"/depot/", this.header )
-        .then(res => {
-            this.$store.state.depots = res.data
-            console.log(res.data.results);
-        })
-        .catch(err => {
-            console.error(err);
-        })
-
+        this.getTransfer()
     },
 
     computed:{
@@ -114,6 +107,27 @@ export default {
 
     },
     methods: {
+    getTransfer() {
+        axios.get(this.$store.state.url+`/depot/?page=${this.currentPage}`, this.header)
+            .then(response => {
+                this.$store.state.depots = response.data 
+            })
+            .then(data => {
+                console.log(data) 
+                if (data.next) {
+                    this.showNextButton = true
+                }
+
+                if (data.previous) {
+                    this.showPrevButton = true
+                }
+
+                this.depots = data.results
+            })
+            .catch(error => {
+                console.log(error)
+            })
+        },
         fetchData(){
             axios.get(this.$store.state.url+"/depot/", this.header )
             .then(res => {
@@ -124,13 +138,13 @@ export default {
                 console.error(err); 
             })           
         },
-        goToNextPage() {
+        loadNext() {
             this.currentPage += 1
-            this.fetchData() 
+            this.getTransfer()
         },
-        goToPreviousPage() {
+        loadPrev() {
             this.currentPage -= 1
-            this.fetchData()
+            this.getTransfer()
         },
 
         close(){
