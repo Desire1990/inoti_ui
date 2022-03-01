@@ -19,18 +19,18 @@
 
                 <div class="input-group mt-3">
                     <label for="montant">MONTANT</label>
-                    <input class="" type="number" v-model='form.montant'>
+                    <input :value="form.montant" @change="updateMontant" class="" type="number">
                     <span v-if="errors.montant" class="text-danger">{{ errors.montant}}</span>
-                </div>
+                </div>                
                 <div class="input-group mt-3">
                     <label for="montant_fbu">MONTANT(Fbu)</label>
-                    <input v-model='form.montant_fbu' type="number" step="any" class="form-control" name="montant_fbu" id="montant_fbu" placeholder="Total Price">
+                    <input v-model='form.montant_fbu' type="number" step="any" class="form-control" name="montant_fbu" id="montant_fbu" placeholder="montant en Fbu">
                     <span v-if="errors.montant" class="text-danger">{{ errors.montant}}</span>
-                </div>
+                </div>                
                 <div class="input-group mt-3">
                     <label for="tel">TELEPHONE</label>
-                        <ValidationProvider :rules="{ regex:/^((\+)257|0)[6-7][1-2, 7-9]\d{2}\d{4}$/ }" v-slot="{ errors }">
-                          <input placeholder="+25779462806" name="form.tel" type="text" v-model="form.tel" >
+                        <ValidationProvider :rules="{ regex:/^((\+)257|)[6-7][1-2, 5-9]\d{3}\d{3}$/ }" v-slot="{ errors }">
+                          <input placeholder="+25779462806 or 79462806" name="form.tel" type="text" v-model="form.tel" >
                           <p style="color:red">{{ errors[0] }}</p>
                         </ValidationProvider>
                 </div>                
@@ -57,17 +57,12 @@ export default {
                 nom : "",
                 montant :'',
                 montant_fbu:'',
-                taux:0,
                 tel : ""
             },
             isValid:true,
-            taux:[],
             depot_id:null,
             update:false,
-            errors : {},
-            users : {},
-            regex: /[0-9]/
-
+            last:''
             
         }
     },
@@ -76,13 +71,30 @@ export default {
             this.form.nom=this.updatedepot.nom
             this.form.montant=this.updatedepot.montant
             this.form.montant_fbu=this.updatedepot.montant_fbu
-            this.form.taux=this.updatedepot.taux
             this.form.tel=this.updatedepot.tel
             this.form.status=this.updatedepot.status
+            this.form.taux=this.updatedepot.taux.taux
             this.depot_id =this.updatedepot.id
-        }      
+        } 
+        this.getTaux()     
     },
     methods: {
+        updateMontant(event) {
+            this.form.montant = event.target.value
+            this.form.montant_fbu = this.form.montant * this.last.taux
+        },
+        getTaux(){
+            axios.get(this.$store.state.url+"/taux/", this.header )
+                .then(response => {
+                    this.$store.state.taux = response.data.results
+                    this.last = response.data.results[response.data.results.length-1]
+                    console.log(this.last.taux)           
+                })
+                .catch(err => {
+                    console.error(err); 
+                }
+            )
+        },
 
         fetchData(){
             axios.get(this.$store.state.url+"/depot/", this.header )
@@ -100,7 +112,6 @@ export default {
                 nom : this.form.nom,
                 montant : this.form.montant,
                 montant_fbu : this.form.montant_fbu,
-                taux : this.form.taux,
                 status : this.form.status,
                 tel : this.form.tel
                },this.header
@@ -194,9 +205,4 @@ export default {
     cursor:pointer;
    
 }
-/*.desos{
-    background-color: teal;
-    color: white;
-    width: 70%;
-}*/
 </style>

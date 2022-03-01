@@ -9,7 +9,7 @@
                 <th>TELEPHONE</th> 
                 <th>DATE</th>                 
                 <th>MONTANT</th>
-                <th v-if="$store.state.user.groups.includes('admin')">COUNT</th>
+                <!-- <th v-if="$store.state.user.groups.includes('admin')">COUNT</th> -->
                 <th v-if="$store.state.user.groups.includes('admin')">TAUX</th>
                 <th v-if="$store.state.user.groups.includes('admin')">STATUS</th>
                 <th>ACTIONS</th> 
@@ -24,7 +24,7 @@
                 <td>{{ depot.tel }}</td>
                 <td>{{datetime(depot.date) }}</td>
                 <td> {{ money(depot.montant_fbu)}} Fbu</td>
-                <td v-if="$store.state.user.groups.includes('admin')"> Servi {{ money(depot.counter)}} fois</td>
+                <!-- <td v-if="$store.state.user.groups.includes('admin')"> Servi {{ money(depot.counter)}} fois</td> -->
                 <td v-if="$store.state.user.groups.includes('admin')"> {{ money(depot.taux.taux)}} Fbu</td>
                 <td v-if="$store.state.user.groups.includes('admin')">{{(depot.is_valid) }}</td>                
                 
@@ -33,8 +33,7 @@
                     <button class="btn btn-info btn-sm ml-1 " @click="Update(depot)" >Modifier </button>
                     <button class="btn btn-danger btn-sm ml-1" v-on:click="DeleteDepot(depot)">Effacer</button> 
                 </div> 
-                <div v-else>
-                    
+                <div v-else>                    
                     <button class="btn btn-info btn-sm ml-1 " @click.once ="appeler(depot); counter+=1"> Appeler</button>           
                     <button class="btn btn-success btn-sm ml-1 "@click.once ='servir(depot)'>Servir</button>
                     
@@ -43,13 +42,14 @@
             </tr>
         </tbody>
   </table>
+
   <center>
       <div class="buttons">
-        <button class="button is-light" @click="loadPrev()" v-if="showPrevButton">Previous</button>
-        <button class="button is-light" @click="loadNext()" v-if="showNextButton">Next</button>
-    </div>
-      
+        <button class="btn btn-info btn-sm ml-1 " @click="loadPrev()" v-if="showPrevButton">Prev</button>
+        <button class="btn btn-info btn-sm ml-1 " @click="loadNext()" v-if="showNextButton">Next  </button>
+    </div>      
   </center>
+
     <ModaleDepot v-if="update"  :updatedepot="updatedepot" @close="close"></ModaleDepot>
     </div>
 
@@ -83,9 +83,9 @@ export default {
             num_depot :0,
             query: '',
             currentPage: 1,
-            showNextButton: true,
-            showPrevButton: true
-}
+            showNextButton: false,
+            showPrevButton: false
+        }
     },
     watch:{
         "$store.state.depots"(new_val){
@@ -107,18 +107,16 @@ export default {
 
     },
     methods: {
-    getTransfer() {
-        axios.get(this.$store.state.url+`/depot/?page=${this.currentPage}`, this.header)
+        getTransfer() {
+            axios.get(this.$store.state.url+`/depot/?page=${this.currentPage}`, this.header)
             .then(response => {
                 this.$store.state.depots = response.data 
-            })
-            .then(data => {
-                console.log(data) 
-                if (data.next) {
+                console.log(response.data) 
+                if (response.data.next) {
                     this.showNextButton = true
                 }
 
-                if (data.previous) {
+                if (response.data.previous) {
                     this.showPrevButton = true
                 }
 
@@ -127,6 +125,14 @@ export default {
             .catch(error => {
                 console.log(error)
             })
+        },
+        loadNext() {
+            this.currentPage += 1
+            this.getTransfer()
+        },
+        loadPrev() {
+            this.currentPage -= 1
+            this.getTransfer()
         },
         fetchData(){
             axios.get(this.$store.state.url+"/depot/", this.header )
@@ -138,15 +144,6 @@ export default {
                 console.error(err); 
             })           
         },
-        loadNext() {
-            this.currentPage += 1
-            this.getTransfer()
-        },
-        loadPrev() {
-            this.currentPage -= 1
-            this.getTransfer()
-        },
-
         close(){
             this.update=false
         },
@@ -165,15 +162,7 @@ export default {
                     .then( response => 
                         
                     {
-                        this.fetchData(),
-                        toast({
-                            message: dep.id+' was deleted',
-                            type: 'is-success',
-                            dismissible: true,
-                            pauseOnHover: true,
-                            duration: 2000,
-                            position: 'bottom-right',
-                        })
+                        this.fetchData()
                         return response
                     }
                 );
@@ -225,7 +214,7 @@ export default {
 
 .silver-star {
   background-color: green;
-  color:black ;
+  color:white ;
 }
 
 .bronze-star {

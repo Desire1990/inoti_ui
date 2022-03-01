@@ -3,7 +3,7 @@
  <div class="input-group">
   <input class="form-control" v-model='search_term'type="text" placeholder="Search" />
     <div class="input-group-append">
-      <button class="btn btn-secondary" type="button" @click.prevent='getAll()'>
+      <button class="btn btn-secondary" type="button">
         <i class="fa fa-search"></i>
       </button>
     </div>
@@ -13,6 +13,7 @@
 </template>
 
 <script>
+  import axios from 'axios'
 export default {
   data() {
     return {
@@ -23,26 +24,8 @@ export default {
       depots : this.$store.state.depots
     }
   },
-  mounted(){
-    this.getAll()
-  },
   methods:{
-    getAll(){
-      url = this.$store.state.url+"/depot/"
-      if (this.search_term!==''||this.search_term!=null){
-        api_url=this.$store.state.url+`/depot/?search=${this.search_term}`
-      }
-      this.loading=true
-      axios.get(api_url)
-      .then((response) => {
-        this.depots=response.data
-        this.loading=false
-      }).catch((error) => {
-        this.loading=false
-        console.error(error);
-      })
-    },
-  }
+   }
 
 }
 </script>
