@@ -10,7 +10,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr class="text-left" v-for="(t, index) in taux.results " :key="t.id">
+            <tr class="text-left" v-for="(t, index) in taux.results " :key="t.id" >
                 <td>{{ index+1 }}</td>
                 <td>{{ money(t.taux)}} Fbu</td>
                 <td>{{ datetime(t.date) }}</td>
@@ -22,23 +22,26 @@
             </tr>
         </tbody> 
     </table>
-    <ModaleDepot v-if="update"  :updatedepot="updatedepot" @close="close"></ModaleDepot>
+    <Mo v-if="update"  :updatedepot="updatedepot" @close="close"></Mo>
     </div>
 
 </template>
-
 <script>
 
 import axios from 'axios'
-import ModaleDepot from '../components/modal'
+import Mo from '../components/modal'
 export default {
-    components:{ModaleDepot,},
+    components:{Mo,},
     data() {
         return {
             form :{
-                taux:''
+                is_valid:''
             },
             classe:{
+                defaut:'gold-star',
+                appel:'silver-star',
+                servi:'bronze-star'
+              },
             update:false,
             taux :[],
             selectedDepot : null,
@@ -46,8 +49,13 @@ export default {
             servie:false,
             revele : false,
             updatedepot:null,
-            counter:0
-            }
+            counter:0,
+            currentPage: 1,
+            num_depot :0,
+            query: '',
+            currentPage: 1,
+            showNextButton: false,
+            showPrevButton: false
         }
     },
     watch:{
@@ -56,16 +64,9 @@ export default {
         }
     },
     mounted() {
-        axios.get(this.$store.state.url+"/taux/", this.header )
-        .then(res => {
-            this.$store.state.taux = res.data          
-            console.log(res.data.results);
-        })
-        .catch(err => {
-            console.error(err); 
-        })
-        
+        this.getTransfer()
     },
+
     computed:{
         header(){
             return{
@@ -74,9 +75,35 @@ export default {
                 }
             }
         },
-
     },
     methods: {
+        getTransfer() {
+            axios.get(this.$store.state.url+`/taux/?page=${this.currentPage}`, this.header)
+            .then(response => {
+                this.$store.state.taux = response.data 
+                console.log(response.data) 
+                if (response.data.next) {
+                    this.showNextButton = true
+                }
+
+                if (response.data.previous) {
+                    this.showPrevButton = true
+                }
+
+                this.taux = data.results
+            })
+            .catch(error => {
+                console.log(error)
+            })
+        },
+        loadNext() {
+            this.currentPage += 1
+            this.getTransfer()
+        },
+        loadPrev() {
+            this.currentPage -= 1
+            this.getTransfer()
+        },
         fetchData(){
             axios.get(this.$store.state.url+"/taux/", this.header )
             .then(res => {
@@ -96,21 +123,21 @@ export default {
             console.log(this.depot)
 
         },
-        DeleteTaux(dep) {
+        DeleteTaux: function(dep) {
             if (confirm('Delete ' + dep.id)) {
                 axios.delete(this.$store.state.url+`/taux/${dep.id}`, {
                     headers :{
                         "Authorization" : `Bearer ${this.$store.state.user.access}`}
                     })
                     .then( response => 
+                        
                     {
                         this.fetchData()
                         return response
                     }
                 );
             }
-        }
-
+        },
 
     },
       
@@ -123,18 +150,18 @@ export default {
     color: white;
 }
 .gold-star {
-  background-color: #ffee58;
-  color:white ;
+  background-color:white;
+  color:black ;
 }
 
 .silver-star {
-  background-color: #BDBDBD;
-  color:white ;
+  background-color: green;
+  color:black ;
 }
 
 .bronze-star {
-  background-color: #cd7f32;
-  color:white ;
+  background-color: yellow;
+  color:black ;
 }
 
 </style>

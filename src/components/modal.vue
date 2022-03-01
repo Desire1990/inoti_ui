@@ -17,7 +17,7 @@
                 </div>
                 <center>
                 <div class="input-group mt-3" >
-                    <button style="background-color: teal; color: white;" v-if="updatedepot" @click="saveUpdateDepot">Modifier</button>
+                    <button style="background-color: teal; color: white;" v-if="updatedepot" @click="saveUpdate">Modifier</button>
                     <button style="background-color: teal; color: white;" v-else @click="depot">Valider</button>
                 </div>
                 </center>
@@ -25,34 +25,30 @@
         </div>
     </div>
 </template>
-
 <script>
 import axios from "axios"
+import { ValidationProvider } from 'vee-validate';
 export default {
     props:{updatedepot:Object},
+    components:{ValidationProvider,},
     data() {
         return {
             form :{
-                taux : "",
-
+                taux : ""
             },
             isValid:true,
-            taux_id:null,
+            depot_id:null,
             update:false,
-            errors : {},
-            users : {},
-
             
         }
     },
     mounted() {
         if(this.updatedepot){
             this.form.taux=this.updatedepot.taux
-            this.taux_id =this.updatedepot.id
-        }
-        console.log(this.updatedepot)         
+        }      
     },
     methods: {
+
         fetchData(){
             axios.get(this.$store.state.url+"/taux/", this.header )
                 .then(res => {
@@ -60,12 +56,13 @@ export default {
                 })
                 .catch(err => {
                     console.error(err); 
-                })
+                }
+            )
             
         },        
         depot(){
             axios.post(this.$store.state.url+"/taux/",{
-                taux : this.form.taux
+                taux : this.form.taux,
                },this.header
             ).then((response) => {
                     console.log(response.data)
@@ -75,8 +72,8 @@ export default {
               console.error(error);
             })                  
         },
-        saveUpdateDepot(){
-            axios.put(this.$store.state.url+"/taux/"+this.taux_id +"/", this.form, this.header)
+        saveUpdate(){
+            axios.put(this.$store.state.url+"/taux/"+this.depot_id +"/", this.form, this.header)
             .then(response => {
                 console.log(response.data)
                 this.fetchData()
@@ -85,15 +82,18 @@ export default {
                 console.error(err); 
             })
         },
+
         emitClose(){
             this.$emit('close')
-        }
-
+        },
     }
 }
 </script>
-<style scoped>
 
+<style scoped>
+.error{
+  color:red;
+}
 .input-group{
     display: flex;
     justify-content: space-around;
@@ -129,6 +129,7 @@ export default {
     background: rgba(0, 0, 0, 0.5);
 
 }
+
 .modale{
     position:fixed;
     top:10%;
@@ -149,4 +150,9 @@ export default {
     cursor:pointer;
    
 }
+/*.desos{
+    background-color: teal;
+    color: white;
+    width: 70%;
+}*/
 </style>
