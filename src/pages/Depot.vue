@@ -1,11 +1,10 @@
 <template>
     <div>
         <div class="text-right">
-            <searchbar />
-            <button style="background-color:darkred; color: white;" class="btn btn mt-3" @click="showModal" v-if="$store.state.user.groups.includes('admin')">Change le taux!</button>
+            <button style="background-color:skyblue; color: black;" class="btn btn mt-3 mr-2" @click="showModal" v-if="$store.state.user.groups.includes('admin')">Changez le taux!</button>
             <Modal v-show="isModalVisible" @close="closeModal" />
-
-             <button style="background-color:teal; color: white;" class="btn btn mt-3" @click="toggleForm" v-if="$store.state.user.groups.includes('admin')">Nouveau transfer</button>
+             <button style="background-color:teal; color: white;" class="btn btn mt-3 mr-3" @click="toggleForm" v-if="$store.state.user.groups.includes('admin')">Nouveau transfer</button>
+            <searchbar />
              <ModaleDepot v-if='new_depot' @close='close' v-bind:toggleForm="toggleForm"/>             
             <DepotList  class=" mt-3"/>
         </div>

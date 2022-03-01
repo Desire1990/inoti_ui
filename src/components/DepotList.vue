@@ -61,6 +61,7 @@ import axios from 'axios'
 import ModaleDepot from '../components/DepotModel'
 export default {
     components:{ModaleDepot,},
+    props:{last:Object},
     data() {
         return {
             form :{

@@ -4,11 +4,13 @@ import store from "./store"
 import router from './router'
 import "bootstrap/dist/css/bootstrap.min.css"
 import "font-awesome/css/font-awesome.min.css"
+import { ValidationProvider, extend } from "vee-validate"
 import '@/main.css'
-
 import VeeValidate from 'vee-validate'
 
 Vue.use(VeeValidate)
+Vue.component("ValidationProvider", ValidationProvider);
+
 
 Vue.config.productionTip = false
 Vue.mixin({

@@ -3,7 +3,7 @@
         
         <div class="text-right">
             <searchbar />
-             <button class="btn btn-primary mt-3" @click="toggleForm">Nouvel approvision</button>
+             <button class="btn btn-primary mt-3 mr-3" @click="toggleForm">Nouvel approvision</button>
              <ModalApprovision v-if='new_approvision' @close='close' v-bind:toggleForm="toggleForm"/>             
             <ApprovisionList class=" mt-3"/>
         </div>

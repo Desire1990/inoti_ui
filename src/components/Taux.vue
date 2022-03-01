@@ -2,7 +2,7 @@
     <div>        
         <div class="text-right">
             <searchbar />
-             <button style="background-color:teal; color: white;" class="btn btn mt-3 md-2" @click="toggleForm" v-if="$store.state.user.groups.includes('admin')">Creer taux</button>
+             <button style="background-color:teal; color: white;" class="btn btn mt-3 mr-3" @click="toggleForm" v-if="$store.state.user.groups.includes('admin')">Creer taux</button>
              <ModaleDepot v-if='new_depot' @close='close' v-bind:toggleForm="toggleForm"/>             
             <TauxList  class=" mt-3"/>
         </div>

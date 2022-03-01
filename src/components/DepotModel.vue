@@ -30,7 +30,7 @@
                 <div class="input-group mt-3">
                     <label for="tel">TELEPHONE</label>
                         <ValidationProvider :rules="{ regex:/^((\+)257|)[6-7][1-2, 5-9]\d{3}\d{3}$/ }" v-slot="{ errors }">
-                          <input placeholder="+25779462806 or 79462806" name="form.tel" type="text" v-model="form.tel" >
+                          <input placeholder="+25779462806 or 79462806" v-validate="'between:8, 12'" name="form.tel" type="text" v-model="form.tel" >
                           <p style="color:red">{{ errors[0] }}</p>
                         </ValidationProvider>
                 </div>                
