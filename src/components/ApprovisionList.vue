@@ -31,6 +31,13 @@
             </tr>
         </tbody> 
     </table>
+    <center>
+      <div class="buttons">
+        <button class="btn btn-info btn-sm ml-1 " @click="loadPrev()" v-if="showPrevButton">Prev</button>
+        <button class="btn btn-info btn-sm ml-1 " @click="loadNext()" v-if="showNextButton">Next  </button>
+    </div>
+    </center>
+      
         <ModaleApprovision v-if="update"  :updateApprovision="updateApprovision" @close="close"></ModaleApprovision>
     </div>
 </template>
@@ -55,7 +62,10 @@ export default {
             update:false,
             selectedDepot : null,
             approvisions : this.$store.state.approvisions,
-            updateApprovision:null
+            updateApprovision:null,
+            currentPage: 1,
+            showNextButton: false,
+            showPrevButton: false
             
         }
     }, 
@@ -72,7 +82,8 @@ export default {
         })
         .catch(err => {
             console.error(err); 
-        })
+        }),
+        this.getTransfer()
         
     },
     computed:{
@@ -86,6 +97,33 @@ export default {
 
     },
     methods: {
+        getTransfer() {
+            axios.get(this.$store.state.url+`/approvision/?page=${this.currentPage}`, this.header)
+            .then(response => {
+                this.$store.state.approvisions = response.data 
+                console.log(response.data) 
+                if (response.data.next) {
+                    this.showNextButton = true
+                }
+
+                if (response.data.previous) {
+                    this.showPrevButton = true
+                }
+
+                this.approvisions = data.results
+            })
+            .catch(error => {
+                console.log(error)
+            })
+        },
+        loadNext() {
+            this.currentPage += 1
+            this.getTransfer()
+        },
+        loadPrev() {
+            this.currentPage -= 1
+            this.getTransfer()
+        },
         fetchData(){
             axios.get(this.$store.state.url+"/approvision/", this.header )
             .then(res => {
