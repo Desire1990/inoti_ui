@@ -32,6 +32,13 @@
             </tr>
         </tbody>
     </table>
+      <center>
+      <div class="buttons">
+        <button class="btn btn-info btn-sm ml-1 " @click="loadPrev()" v-if="showPrevButton">Prev</button>
+        <button class="btn btn-info btn-sm ml-1 " @click="loadNext()" v-if="showNextButton">Next  </button>
+    </div>
+      
+  </center>
     <ModalDepense v-if = 'update' :updatedepense="updatedepense" @close='close'/>
     </div>
 </template>
@@ -55,8 +62,10 @@ export default {
               },
             update:false,
             updatedepense:null,
-            depenses : this.$store.state.depenses
-
+            depenses : this.$store.state.depenses,
+            currentPage: 1,
+            showNextButton: false,
+            showPrevButton: false
         }
     },
     watch:{
@@ -65,15 +74,7 @@ export default {
         }
     },
     mounted() {
-        axios.get(this.$store.state.url+"/depense/", this.header )
-        .then(res => {
-            this.$store.state.depenses = res.data
-            console.log(res.data.results);
-        })
-        .catch(err => {
-            console.error(err);
-        })
-
+        this.getTransfer()
     },
     computed:{
         header(){
@@ -85,9 +86,37 @@ export default {
 		},
     },
     methods: {
+        getTransfer() {
+            axios.get(this.$store.state.url+`/depense/?page=${this.currentPage}`, this.header)
+            .then(response => {
+                this.$store.state.depenses = response.data 
+                console.log(response.data) 
+                if (response.data.next) {
+                    this.showNextButton = true
+                }
+
+                if (response.data.previous) {
+                    this.showPrevButton = true
+                }
+
+                this.depenses = data.results
+            })
+            .catch(error => {
+                console.log(error)
+            })
+        },
+        loadNext() {
+            this.currentPage += 1
+            this.getTransfer()
+        },
+        loadPrev() {
+            this.currentPage -= 1
+            this.getTransfer()
+        },
+
         getAll(){
               if (this.search_term!==''||this.search_term!=null){
-                api_url=this.$store.state.url+`/depot/?search=${this.search_term}`
+                api_url=this.$store.state.url+`/depense/?search=${this.search_term}`
               }
               this.loading=true
               this.$http.get(api_url)
@@ -99,6 +128,7 @@ export default {
                 console.error(error);
               })
             },
+
         fetchData(){
             axios.get(this.$store.state.url+"/depense/", this.header )
             .then(res => {
@@ -120,11 +150,7 @@ export default {
         },
         Delete(depense) {
             if (confirm('Delete ' + depense.id)) {
-                axios.delete(this.$store.state.url+`/depense/${depense.id}`, {
-                    headers :{
-                        "Authorization" : `Bearer ${this.$store.state.user.access}`
-
-                    }})
+                axios.delete(this.$store.state.url+`/depense/${depense.id}`, this.header)
                     .then( response => {
                         this.fetchData()
                         return response
