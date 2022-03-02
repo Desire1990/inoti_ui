@@ -13,7 +13,7 @@
                 </div>
                 
             </router-link>
-            <router-link to="/depot" active-class="active" tag="button" exact class="side-btn">
+            <router-link to="/transfer" active-class="active" tag="button" exact class="side-btn">
                 <div class="link-container">
                     <h6>Transfer</h6>
                 </div>

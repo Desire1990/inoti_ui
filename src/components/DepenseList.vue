@@ -113,22 +113,6 @@ export default {
             this.currentPage -= 1
             this.getTransfer()
         },
-
-        getAll(){
-              if (this.search_term!==''||this.search_term!=null){
-                api_url=this.$store.state.url+`/depense/?search=${this.search_term}`
-              }
-              this.loading=true
-              this.$http.get(api_url)
-              .then((response) => {
-                this.depots=response.data
-                this.loading=false
-              }).catch((error) => {
-                this.loading=false
-                console.error(error);
-              })
-            },
-
         fetchData(){
             axios.get(this.$store.state.url+"/depense/", this.header )
             .then(res => {
@@ -148,15 +132,18 @@ export default {
             console.log(this.depense)
 
         },
-        Delete(depense) {
-            if (confirm('Delete ' + depense.id)) {
-                axios.delete(this.$store.state.url+`/depense/${depense.id}`, this.header)
+        Delete: function(dep) {
+            if (confirm('Delete ' + dep.id)) {
+                axios.delete(this.$store.state.url+`/depense/${dep.id}`, {
+                    headers :{
+                        "Authorization" : `Bearer ${this.$store.state.user.access}`}
+                    })
                     .then( response => {
                         this.fetchData()
                         return response
                     });
                 }
-        },
+            },
         rejeter(depense){
             if (confirm('êtes-vous sur de vouloir rejeter le depense de ' + depense.montant)) {
                 axios.patch(this.$store.state.url+`/depense/${depense.id}`+'/',{

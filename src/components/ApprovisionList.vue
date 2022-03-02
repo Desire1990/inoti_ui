@@ -145,11 +145,9 @@ export default {
 
         DeleteApprovision: function(depense) {
             if (confirm('Delete ' + depense.id)) {
-                axios.delete(this.$store.state.url+`/approvision/${depense.id}`, {
-                    headers :{
-                        "Authorization" : `Bearer ${this.$store.state.user.access}`}
-                    })
+                axios.delete(this.$store.state.url+`/approvision/${depense.id}`, this.header)
                     .then( response => {
+                        console.log('deleted'+ depense.id)
                         this.fetchData()
                         return response   
                     });

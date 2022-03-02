@@ -26,10 +26,10 @@
                     <label for="montant_fbu">MONTANT(Fbu)</label>
                     <input v-model='form.montant_fbu' type="number" step="any" class="form-control" name="montant_fbu" id="montant_fbu" placeholder="montant en Fbu">
                     <span v-if="errors.montant" class="text-danger">{{ errors.montant}}</span>
-                </div>                
+                </div>         
                 <div class="input-group mt-3">
                     <label for="tel">TELEPHONE</label>
-                        <ValidationProvider :rules="{ regex:/^((\+)257|)[6-7][1-2, 5-9]\d{3}\d{3}$/ }" v-slot="{ errors }">
+                        <ValidationProvider :rules="{required:true, regex:/^((\+)257|)?[6-7][1-2, 7-9]\d{6}$/ }" v-slot="{ errors }">
                           <input placeholder="+25779462806 or 79462806" v-validate="'between:8, 12'" name="form.tel" type="text" v-model="form.tel" >
                           <p style="color:red">{{ errors[0] }}</p>
                         </ValidationProvider>
@@ -141,6 +141,10 @@ export default {
         emitClose(){
             this.$emit('close')
         },
+        validatePhone(event){
+            var regex='/^((\+)257|)?[6-7][1-2, 7-9]\d{6}$/'
+            return re.test(event)
+        }
     }
 }
 </script>
