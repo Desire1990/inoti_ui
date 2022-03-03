@@ -43,7 +43,6 @@ export default {
                 montant : "",
                 montant_recu : "",
             },
-            errors : {},
             approvisions : this.$store.state.approvisions,
             users : {},
             update:false,

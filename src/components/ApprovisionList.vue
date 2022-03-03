@@ -110,7 +110,7 @@ export default {
                     this.showPrevButton = true
                 }
 
-                this.approvisions = data.results
+                this.approvisions = response.data.results
             })
             .catch(error => {
                 console.log(error)

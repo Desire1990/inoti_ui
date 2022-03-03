@@ -121,7 +121,7 @@ export default {
                     this.showPrevButton = true
                 }
 
-                this.depots = data.results
+                this.depots = response.data.results
             })
             .catch(error => {
                 console.log(error)
@@ -151,7 +151,6 @@ export default {
         Update(depot){
             this.update = true
             this.updatedepot=depot
-            console.log(this.depot)
 
         },
         DeleteDepot: function(dep) {

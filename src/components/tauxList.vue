@@ -90,7 +90,7 @@ export default {
                     this.showPrevButton = true
                 }
 
-                this.taux = data.results
+                this.taux = response.data.results
             })
             .catch(error => {
                 console.log(error)

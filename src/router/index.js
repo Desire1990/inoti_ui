@@ -34,8 +34,8 @@ const routes = [
       {
         path: '/depense',
         component: () => import(/* webpackChunkName: "Depenses" */ '../pages/Depenses.vue')
-      }
-      // { path: "*", redirect: "/"}
+      },
+      { path: "*", redirect: "/"}
 ]
 
 const router = new VueRouter({

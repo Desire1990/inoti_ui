@@ -99,7 +99,7 @@ export default {
                     this.showPrevButton = true
                 }
 
-                this.depenses = data.results
+                this.depenses = response.data.results
             })
             .catch(error => {
                 console.log(error)

@@ -58,7 +58,6 @@ export default {
             },
             depot_id:null,
             update:false,
-            errors : {},
             users : {},
             depense_id:null
             
