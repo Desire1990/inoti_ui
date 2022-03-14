@@ -27,18 +27,18 @@
                     <input v-model='form.montant_fbu' type="number" step="any" class="form-control" name="montant_fbu" id="montant_fbu" placeholder="montant en Fbu">
                     <span v-if="errors.montant" class="text-danger">{{ errors.montant}}</span>
                 </div>                 
-                <div class="input-group mt-3">
+<!--                 <div class="input-group mt-3">
                     <label for="tel">TELEPHONE</label>
                     <input type="tel" placeholder="(123) 456-7890" class="form-control" id="input-phone" v-model="form.tel" minlengt='8' maxlength="12" @input="enforcePhoneFormat()"/>
                     <span v-if="errors.montant" class="text-danger">{{ errors.montant}}</span>
-                </div>         
-<!--                 <div class="input-group mt-3">
+                </div>    -->      
+                <div class="input-group mt-3">
                     <label for="tel">TELEPHONE</label>
                         <ValidationProvider :rules="{required:true, regex:/^((\+)257|)?[6-7][1-2, 7-9]\d{6}$/ }" v-slot="{ errors }">
                           <input placeholder="+25779462806 or 79462806" v-validate="'between:8, 12'" name="form.tel" type="text" v-model="form.tel" >
                           <p style="color:red">{{ errors[0] }}</p>
                         </ValidationProvider>
-                </div>   -->              
+                </div>                
                 <center>
                 <div class="input-group mt-3" >
                     <button style="background-color: teal; color: white;" v-if="updatedepot" @click="saveUpdateDepot">Modifier</button>
