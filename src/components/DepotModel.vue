@@ -24,7 +24,7 @@
                 </div>                
                 <div class="input-group mt-3">
                     <label for="montant_fbu">MONTANT(Fbu)</label>
-                    <input v-model='form.montant_fbu' type="number" step="any" class="form-control" name="montant_fbu" id="montant_fbu" placeholder="montant en Fbu">
+                    <span v-model='form.montant_fbu' type="number" step="any" class="form-control" name="montant_fbu" id="montant_fbu">{{form.montant_fbu}}</span>
                     <span v-if="errors.montant" class="text-danger">{{ errors.montant}}</span>
                 </div>                 
 <!--                 <div class="input-group mt-3">
