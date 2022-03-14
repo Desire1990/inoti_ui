@@ -38,6 +38,16 @@
                 <td v-else></td>
             </tr>
         </tbody> 
+        <tfoot>
+            <tr class="tf">
+              <th>Total</th>
+              <th  v-if="$store.state.user.groups.includes('admin')">{{currency(total())}}</th>
+              <th></th>
+              <th>{{money(totale())}} Fbu</th>
+              <th  v-if="$store.state.user.groups.includes('admin')"></th>
+              <th></th>
+            </tr>
+        </tfoot>
     </table>
     <center>
       <div class="buttons">
@@ -87,8 +97,7 @@ export default {
     mounted() {
         axios.get(this.$store.state.url+"/approvision/", this.header )
         .then(res => {
-            this.$store.state.approvisions = res.data          
-            console.log(res.data.results);
+            this.$store.state.approvisions = res.data 
         })
         .catch(err => {
             console.error(err); 
@@ -108,6 +117,22 @@ export default {
 
     },
     methods: {
+        total(){
+            let total = 0;
+            for(let item of this.approvisions.results){
+                if (item.validate=='Validé'){
+                    total += item.montant;
+                }
+            }
+            return total;
+        },
+        totale(){
+            let total = 0;
+            for(let item of this.approvisions.results){
+                total += item.montant_recu;
+            }
+            return total;
+        },
         getData: function() {
           let api_url = this.$store.state.url+"/approvision/"
           if(this.search_term!==''||this.search_term!==null) {
@@ -117,7 +142,6 @@ export default {
           axios.get(api_url, this.header)
               .then((response) => {
                 this.$store.state.approvisions = response.data
-                console.log(response.data) 
                 this.loading = false;
               })
               .catch((err) => {
@@ -129,7 +153,6 @@ export default {
             axios.get(this.$store.state.url+`/approvision/?page=${this.currentPage}`, this.header)
             .then(response => {
                 this.$store.state.approvisions = response.data 
-                console.log(response.data) 
                 if (response.data.next) {
                     this.showNextButton = true
                 }
@@ -171,7 +194,7 @@ export default {
             console.log(this.depot)
         },
 
-        DeleteApprovision: function(depense) {
+        DeleteApprovision(depense) {
             if (confirm('Delete ' + depense.id)) {
                 axios.delete(this.$store.state.url+`/approvision/${depense.id}`, this.header)
                     .then( response => {
@@ -205,6 +228,11 @@ export default {
     background-color: #20c997;
     text-align: left;
     text-decoration-color: white;
+}
+.tf {
+    background-color: thistle;
+    text-align: left;
+    color: black;
 }
 .gold-star {
   background-color:white;

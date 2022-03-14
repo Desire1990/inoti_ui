@@ -24,19 +24,29 @@
                 <td>{{(depens.motif)}}</td>
                 <td>{{(depens.validate)}}</td>
                 <td v-if="depens.validate!='Validé'">
-                <button class="btn btn-success btn-sm ml-1" v-on:click.once="valider(depens)" v-if='$store.state.user.groups.includes("admin")'>
+                    <button class="btn btn-success btn-sm ml-1" v-on:click.once="valider(depens)" v-if='$store.state.user.groups.includes("admin")'>
                     valider
-                </button>
-                <button class="btn btn-success btn-sm ml-1" v-on:click.once="rejeter(depens)" v-if='$store.state.user.groups.includes("admin")'>
+                    </button>
+                    <button class="btn btn-success btn-sm ml-1" v-on:click.once="rejeter(depens)" v-if='$store.state.user.groups.includes("admin")'>
                     rejeter
-                </button>
+                    </button>
                     <button v-else class="btn btn-danger btn-sm ml-1 " @click="Delete(depens)">
                     Delete
-                </button >
+                    </button >
                 </td>
                 <td v-else></td>
             </tr>
         </tbody>
+        <tfoot>
+            <tr class="tf">
+              <th>Total</th>
+              <th>{{(money(total()))}} Fbu</th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+            </tr>
+        </tfoot>
     </table>
       <center>
       <div class="buttons">
@@ -96,6 +106,15 @@ export default {
 		},
     },
     methods: {
+        total(){
+            let total = 0;
+            for(let item of this.depenses.results){
+                if (item.validate=='Validé'){
+                    total += item.montant;
+                }
+            }
+            return total;
+        },
         getData: function() {
           let api_url = this.$store.state.url+"/depense/"
           if(this.search_term!==''||this.search_term!==null) {
@@ -200,6 +219,11 @@ export default {
 <style scoped>
 .tr {
     background-color: #20c997;
+    text-align: left;
+    text-decoration-color: white;
+}
+.tf {
+    background-color: thistle;
     text-align: left;
     text-decoration-color: white;
 }

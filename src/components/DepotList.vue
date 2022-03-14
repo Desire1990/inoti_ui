@@ -9,8 +9,8 @@
         <thead class="tr">
             <tr style={background-color:pink;} >
                 <th >#</th> 
-                <th v-if="$store.state.user.groups.includes('admin')">MONTANT($)</th>
                 <th>NOM DU BENEFICIER</th> 
+                <th v-if="$store.state.user.groups.includes('admin')">MONTANT($)</th>
                 <th>TELEPHONE</th> 
                 <th>DATE</th>                 
                 <th>MONTANT</th>
@@ -24,12 +24,11 @@
             <tr class="text-left" v-for="(depot, index) in depots.results" :key="depot.id" :class="classe[depot.is_valid]" >
                
                 <th>{{ index+1 }}.</th>
-                <td v-if="$store.state.user.groups.includes('admin')"> {{ money(depot.montant)}} $</td>
                 <td>{{ depot.nom }}</td>
+                <td v-if="$store.state.user.groups.includes('admin')"> {{ currency(depot.montant)}}</td>
                 <td>{{ depot.tel }}</td>
                 <td>{{datetime(depot.date) }}</td>
                 <td> {{ money(depot.montant_fbu)}} Fbu</td>
-                <!-- <td v-if="$store.state.user.groups.includes('admin')"> Servi {{ money(depot.counter)}} fois</td> -->
                 <th v-if="$store.state.user.groups.includes('admin')"> {{ money(depot.taux.taux)}} Fbu</th>
                 <td v-if="$store.state.user.groups.includes('admin')">{{(depot.is_valid) }}</td>                
                 
@@ -50,6 +49,19 @@
 
             </tr>
         </tbody>
+        <tfoot>
+            <tr class="tf">
+              <th>Total</th>
+              <th></th>
+              <th v-if="$store.state.user.groups.includes('admin')">{{currency(total())}}</th>
+              <th></th>
+              <th></th>
+              <th>{{money(totale())}} Fbu</th>
+              <th></th>
+              <th  v-if="$store.state.user.groups.includes('admin')"></th>
+              <th  v-if="$store.state.user.groups.includes('admin')"></th>
+            </tr>
+        </tfoot>
   </table>
 
   <center>
@@ -74,7 +86,8 @@ export default {
     data() {
         return {
             form :{
-                is_valid:''
+                is_valid:'',
+                montant:''
             },
             classe:{
                 defaut:'gold-star',
@@ -82,7 +95,7 @@ export default {
                 servi:'bronze-star'
               },
             update:false,
-            depots :[],
+            depots:this.$store.state.depots,
             selectedDepot : null,
             clicked:false,
             servie:false,
@@ -120,6 +133,20 @@ export default {
 
     },
     methods: {
+        total(){
+            let total = 0;
+            for(let item of this.depots.results){
+                total += item.montant;
+            }
+            return total;
+        },
+        totale(){
+            let total = 0;
+            for(let item of this.depots.results){
+                total += item.montant_fbu;
+            }
+            return total;
+        },
         getData: function() {
           let api_url = this.$store.state.url+"/depot/"
           if(this.search_term!==''||this.search_term!==null) {
@@ -235,6 +262,11 @@ export default {
     background-color: teal;
     text-align: left;
     color: white;
+}
+.tf {
+    background-color: thistle;
+    text-align: left;
+    color: black;
 }
 .gold-star {
   background-color:white;
