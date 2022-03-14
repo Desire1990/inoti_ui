@@ -1,20 +1,18 @@
 <template>
-    <div>        
+    <div>   
+            <h1  class="form-inline my-2 my-lg-0" style="margin-left: 30%;">Liste de tous les depenses</h1>
         <div class="text-right">
-            <br>
-            <searchbar />
-             <button class="btn btn-primary mt-3 mr-3" @click="toggleForm">Nouvelle depense</button>
+             <button class="btn btn-primary mt-3 mr-2" @click="toggleForm" >Nouvelle depense</button>
              <ModalDepense v-if='new_depense' @close='close' v-bind:toggleForm="toggleForm"/>             
-            <DepenseList  class=" mt-3"/>
+            <DepenseList/>
         </div>
     </div>
 </template>
 <script>
 import DepenseList from '../components/DepenseList.vue'
 import ModalDepense from '../components/ModalDepense.vue'
-import searchbar from '../components/SearchBar.vue'
 export default {
-  components: { DepenseList, ModalDepense, searchbar },
+  components: { DepenseList, ModalDepense,  },
     data(){
         return {           
         new_depense : false

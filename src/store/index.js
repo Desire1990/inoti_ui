@@ -4,8 +4,8 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     user: null,
-    url:"/api",
-    // url: 'http://localhost:8000/api',
+    // url:"/api",
+    url: 'http://localhost:8000/api',
     // url:'https://inoti.amidev.bi/api',
     account:[],
     depots: [],
