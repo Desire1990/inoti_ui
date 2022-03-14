@@ -1,8 +1,7 @@
 <template>
     <div> 
-        
+        <h1  class="form-inline my-2 my-lg-0" style="margin-left: 20%;color: teal;">Liste de tous les approvisions</h1>
         <div class="text-right">
-            <searchbar />
              <button class="btn btn-primary mt-3 mr-2" @click="toggleForm" v-if='$store.state.user.groups.includes("admin")'>Nouvel approvision</button>
              <ModalApprovision v-if='new_approvision' @close='close' v-bind:toggleForm="toggleForm"/>             
             <ApprovisionList class=" mt-3"/>
@@ -13,9 +12,8 @@
 <script>
 import ApprovisionList from '../components/ApprovisionList.vue'
 import ModalApprovision from '../components/ModalApprovision.vue'
-import searchbar from '../components/SearchBar.vue'
 export default {
-  components: { ApprovisionList, ModalApprovision, searchbar },
+  components: { ApprovisionList, ModalApprovision,  },
     data(){
         return {
            
