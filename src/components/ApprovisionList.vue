@@ -1,5 +1,10 @@
  <template>
     <div>
+          <div class="form-inline my-2 my-lg-0" style="margin-left: 5%;">
+        <input class="form-control mr-sm-2" type="text" placeholder="Search" v-model="search_term" aria-label="Search">
+        <button class="btn btn-outline-success my-2 my-sm-0" v-on:click.prevent="getData()">Search</button>
+      </div>
+      <br>
     <table class="table table-light text-left" >
         <thead class="tr">
             <tr>
@@ -7,7 +12,7 @@
                 <th v-if="$store.state.user.groups.includes('admin')">MONTANT</th> 
                 <th>DATE</th> 
                 <th>MONTANT RECU</th>
-                <th>STATUS</th>
+                <th v-if="$store.state.user.groups.includes('admin')">STATUS</th>
                 <th>ACTIONS</th> 
             </tr>
         </thead>
@@ -17,17 +22,20 @@
                 <td v-if="$store.state.user.groups.includes('admin')">{{ money(depot.montant)}} $</td>
                 <td>{{datetime(depot.date) }}</td>
                 <td> {{ money(depot.montant_recu) }} Fbu</td>
-                <td> {{ (depot.validate) }}</td>
-                <td><button class="btn btn-info btn-sm ml-1" @click="Update(depot)" v-if="$store.state.user.groups.includes('admin')">
+                <td v-if="$store.state.user.groups.includes('admin')"> {{ (depot.validate) }}</td>
+                
+                <td v-if="depot.validate!='Validé'">
+                    <button class="btn btn-info btn-sm ml-1" @click="Update(depot)" v-if="$store.state.user.groups.includes('admin')">
                     Modifier
-                </button>
-                <button class="btn btn-danger btn-sm ml-1" v-on:click="DeleteApprovision(depot)" v-if="$store.state.user.groups.includes('admin')">
+                    </button>
+                    <button class="btn btn-danger btn-sm ml-1" v-on:click="DeleteApprovision(depot)" v-if="$store.state.user.groups.includes('admin')">
                     Effacer
-                </button>
-                <button v-else class="btn btn-info btn-sm ml-1" v-on:click="Valider(depot)">
+                    </button>
+                    <button v-else class="btn btn-info btn-sm ml-1" v-on:click="Valider(depot)">
                     Valider
-                </button>
+                    </button>
                 </td>
+                <td v-else></td>
             </tr>
         </tbody> 
     </table>
@@ -65,7 +73,9 @@ export default {
             updateApprovision:null,
             currentPage: 1,
             showNextButton: false,
-            showPrevButton: false
+            showPrevButton: false,
+            search_term:'',
+            loading:false
             
         }
     }, 
@@ -83,7 +93,8 @@ export default {
         .catch(err => {
             console.error(err); 
         }),
-        this.getTransfer()
+        this.getTransfer(),
+        this.getData()
         
     },
     computed:{
@@ -97,6 +108,23 @@ export default {
 
     },
     methods: {
+        getData: function() {
+          let api_url = this.$store.state.url+"/approvision/"
+          if(this.search_term!==''||this.search_term!==null) {
+            api_url = this.$store.state.url+`/approvision/?search=${this.search_term}`
+          }
+          this.loading = true;
+          axios.get(api_url, this.header)
+              .then((response) => {
+                this.$store.state.approvisions = response.data
+                console.log(response.data) 
+                this.loading = false;
+              })
+              .catch((err) => {
+                this.loading = false;
+                console.log(err);
+              })
+        },
         getTransfer() {
             axios.get(this.$store.state.url+`/approvision/?page=${this.currentPage}`, this.header)
             .then(response => {

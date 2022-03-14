@@ -1,5 +1,10 @@
  <template>
     <div>
+    <div class="form-inline my-2 my-lg-0" style="margin-left: 3%;">
+        <input class="form-control mr-sm-2" type="text" placeholder="Search" v-model="search_term" aria-label="Search">
+        <button class="btn btn-outline-success my-2 my-sm-0" v-on:click.prevent="getData()">Search</button>
+      </div>
+      <br>
     <table class="table table-light text-left" >
         <thead class="tr">
             <tr>
@@ -18,7 +23,7 @@
                 <td>{{datetime(depens.date)}}</td>
                 <td>{{(depens.motif)}}</td>
                 <td>{{(depens.validate)}}</td>
-                <td>
+                <td v-if="depens.validate!='Validé'">
                 <button class="btn btn-success btn-sm ml-1" v-on:click.once="valider(depens)" v-if='$store.state.user.groups.includes("admin")'>
                     valider
                 </button>
@@ -29,6 +34,7 @@
                     Delete
                 </button >
                 </td>
+                <td v-else></td>
             </tr>
         </tbody>
     </table>
@@ -65,7 +71,9 @@ export default {
             depenses : this.$store.state.depenses,
             currentPage: 1,
             showNextButton: false,
-            showPrevButton: false
+            showPrevButton: false,
+            search_term:'',
+            loading:false
         }
     },
     watch:{
@@ -74,7 +82,9 @@ export default {
         }
     },
     mounted() {
-        this.getTransfer()
+        this.getTransfer(),
+        this.getData(),
+        this.fetchData()
     },
     computed:{
         header(){
@@ -86,6 +96,23 @@ export default {
 		},
     },
     methods: {
+        getData: function() {
+          let api_url = this.$store.state.url+"/depense/"
+          if(this.search_term!==''||this.search_term!==null) {
+            api_url = this.$store.state.url+`/depense/?search=${this.search_term}`
+          }
+          this.loading = true;
+          axios.get(api_url, this.header)
+              .then((response) => {
+                this.$store.state.depenses = response.data
+                console.log(response.data) 
+                this.loading = false;
+              })
+              .catch((err) => {
+                this.loading = false;
+                console.log(err);
+              })
+        },
         getTransfer() {
             axios.get(this.$store.state.url+`/depense/?page=${this.currentPage}`, this.header)
             .then(response => {
@@ -134,13 +161,10 @@ export default {
         },
         Delete: function(dep) {
             if (confirm('Delete ' + dep.id)) {
-                axios.delete(this.$store.state.url+`/depense/${dep.id}`, {
-                    headers :{
-                        "Authorization" : `Bearer ${this.$store.state.user.access}`}
-                    })
-                    .then( response => {
+                axios.delete(this.$store.state.url+`/depense/${dep.id}`, this.header)
+                    .then( res => {
+                        console.log(res)
                         this.fetchData()
-                        return response
                     });
                 }
             },

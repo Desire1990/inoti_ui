@@ -166,7 +166,7 @@ export default {
 
 .modale{
     position:fixed;
-    top:10%;
+    top:20%;
     height: auto;
 }
 .card-modal

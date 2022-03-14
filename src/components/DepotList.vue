@@ -1,5 +1,10 @@
 <template>
 <div class="table-responsive">
+      <div class="form-inline my-2 my-lg-0" style="margin-left: 5%;">
+        <input class="form-control mr-sm-2" type="text" placeholder="Search" v-model="search_term" aria-label="Search">
+        <button class="btn btn-outline-success my-2 my-sm-0" v-on:click.prevent="getData()">Search</button>
+      </div>
+      <br>
   <table class="table">
         <thead class="tr">
             <tr style={background-color:pink;} >
@@ -16,29 +21,33 @@
             </tr>
         </thead>
         <tbody>
-            <tr class="text-left" v-for="(depot, index) in depots.results" :key="depot.id" :class="classe[depot.is_valid]">
+            <tr class="text-left" v-for="(depot, index) in depots.results" :key="depot.id" :class="classe[depot.is_valid]" >
                
-                <td>{{ index+1 }}</td>
+                <th>{{ index+1 }}.</th>
                 <td v-if="$store.state.user.groups.includes('admin')"> {{ money(depot.montant)}} $</td>
                 <td>{{ depot.nom }}</td>
                 <td>{{ depot.tel }}</td>
                 <td>{{datetime(depot.date) }}</td>
                 <td> {{ money(depot.montant_fbu)}} Fbu</td>
                 <!-- <td v-if="$store.state.user.groups.includes('admin')"> Servi {{ money(depot.counter)}} fois</td> -->
-                <td v-if="$store.state.user.groups.includes('admin')"> {{ money(depot.taux.taux)}} Fbu</td>
+                <th v-if="$store.state.user.groups.includes('admin')"> {{ money(depot.taux.taux)}} Fbu</th>
                 <td v-if="$store.state.user.groups.includes('admin')">{{(depot.is_valid) }}</td>                
                 
-                <td >
-                <div v-if="$store.state.user.groups.includes('admin')">
+                <td v-if='depot.is_valid!="servi"'>
+                <div v-if="$store.state.user.groups.includes('admin') ">
                     <button class="btn btn-info btn-sm ml-1 " @click="Update(depot)" >Modifier </button>
                     <button class="btn btn-danger btn-sm ml-1" v-on:click="DeleteDepot(depot)">Effacer</button> 
                 </div> 
                 <div v-else>                    
-                    <button class="btn btn-info btn-sm ml-1 " @click.once ="appeler(depot); counter+=1"> Appeler</button>           
-                    <button class="btn btn-success btn-sm ml-1 "@click.once ='servir(depot)'>Servir</button>
+                    <button class="btn btn-info btn-sm ml-1 " @click ="appeler(depot); counter+=1; isHidden = true"> Appeler</button>           
+                    <button class="btn btn-success btn-sm ml-1 "@click ='servir(depot); isHidden = true'>Servir</button>
                     
                 </div>
                 </td>
+                <td v-else>
+                    
+                </td>
+
             </tr>
         </tbody>
   </table>
@@ -85,7 +94,9 @@ export default {
             query: '',
             currentPage: 1,
             showNextButton: false,
-            showPrevButton: false
+            showPrevButton: false,
+            search_term:'',
+            loading:false
         }
     },
     watch:{
@@ -94,7 +105,8 @@ export default {
         }
     },
     mounted() {
-        this.getTransfer()
+        this.getTransfer(),
+        this.getData();
     },
 
     computed:{
@@ -108,6 +120,23 @@ export default {
 
     },
     methods: {
+        getData: function() {
+          let api_url = this.$store.state.url+"/depot/"
+          if(this.search_term!==''||this.search_term!==null) {
+            api_url = this.$store.state.url+`/depot/?search=${this.search_term}`
+          }
+          this.loading = true;
+          axios.get(api_url, this.header)
+              .then((response) => {
+                this.$store.state.depots = response.data
+                console.log(response.data) 
+                this.loading = false;
+              })
+              .catch((err) => {
+                this.loading = false;
+                console.log(err);
+              })
+        },
         getTransfer() {
             axios.get(this.$store.state.url+`/depot/?page=${this.currentPage}`, this.header)
             .then(response => {
