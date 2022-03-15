@@ -121,17 +121,6 @@ export default {
         this.getTransfer(),
         this.getData();
     },
-
-    computed:{
-        header(){
-            return{
-                headers :{
-                    "Authorization" : `Bearer ${this.$store.state.user.access}`
-                }
-            }
-        },
-
-    },
     methods: {
         total(){
             let total = 0;
@@ -179,9 +168,6 @@ export default {
 
                 this.depots = response.data.results
             })
-            .catch(error => {
-                console.log(error)
-            })
         },
         loadNext() {
             this.currentPage += 1
@@ -209,12 +195,9 @@ export default {
             this.updatedepot=depot
 
         },
-        DeleteDepot: function(dep) {
+        DeleteDepot(dep) {
             if (confirm('Delete ' + dep.id)) {
-                axios.delete(this.$store.state.url+`/depot/${dep.id}`, {
-                    headers :{
-                        "Authorization" : `Bearer ${this.$store.state.user.access}`}
-                    })
+                axios.delete(this.$store.state.url+`/depot/${dep.id}/`, this.header)
                     .then( response => 
                         
                     {

@@ -93,8 +93,7 @@ export default {
     },
     mounted() {
         this.getTransfer(),
-        this.getData(),
-        this.fetchData()
+        this.getData()
     },
     computed:{
         header(){
@@ -159,16 +158,7 @@ export default {
             this.currentPage -= 1
             this.getTransfer()
         },
-        fetchData(){
-            axios.get(this.$store.state.url+"/depense/", this.header )
-            .then(res => {
-                this.$store.state.depenses = res.data
-                console.log(res.data.results);
-            })
-            .catch(err => {
-                console.error(err);
-            })
-        },
+
         close(){
             this.update=false
         },
@@ -180,10 +170,10 @@ export default {
         },
         Delete: function(dep) {
             if (confirm('Delete ' + dep.id)) {
-                axios.delete(this.$store.state.url+`/depense/${dep.id}`, this.header)
+                axios.delete(this.$store.state.url+`/depense/${dep.id}/`, this.header)
                     .then( res => {
                         console.log(res)
-                        this.fetchData()
+                        this.getTransfer()
                     });
                 }
             },
@@ -194,7 +184,7 @@ export default {
                 }, this.header)
                 .then(response => {
                     console.log(response.data)
-                    this.fetchData()
+                    this.getTransfer()
                 }).catch(err => {
                     console.error(err); 
                 })
@@ -207,7 +197,7 @@ export default {
                 }, this.header)
                 .then(response => {
                     console.log(response.data)
-                    this.fetchData()
+                    this.getTransfer()
                 }).catch(err => {
                     console.error(err); 
                 })

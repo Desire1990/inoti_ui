@@ -196,7 +196,7 @@ export default {
 
         DeleteApprovision(depense) {
             if (confirm('Delete ' + depense.id)) {
-                axios.delete(this.$store.state.url+`/approvision/${depense.id}`, this.header)
+                axios.delete(this.$store.state.url+`/approvision/${depense.id}/`, this.header)
                     .then( response => {
                         console.log('deleted'+ depense.id)
                         this.fetchData()
