@@ -1,7 +1,6 @@
 <template>
     <div>        
         <div class="text-right">
-            <searchbar />
              <button style="background-color:teal; color: white;" class="btn btn mt-3 mr-3" @click="toggleForm" v-if="$store.state.user.groups.includes('admin')">Creer taux</button>
              <ModaleDepot v-if='new_depot' @close='close' v-bind:toggleForm="toggleForm"/>             
             <TauxList  class=" mt-3"/>
@@ -11,9 +10,8 @@
 <script>
 import TauxList from '../components/tauxList.vue'
 import ModaleDepot from '../components/modal.vue'
-import searchbar from '../components/SearchBar.vue'
 export default {
-  components: { TauxList, ModaleDepot, searchbar},
+  components: { TauxList, ModaleDepot},
     data(){
         return {           
         new_depot : false,

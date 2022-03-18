@@ -1,5 +1,9 @@
 <template v-slot:defaul>
     <div>
+    <div class="search-wrapper">
+        <input type="text" v-model="search" placeholder="Search title.."/>
+        <label>Search title:</label><br>
+    </div>
     <table class="table table-light text-left" >
         <thead class="tr">
             <tr style='{background-color:pink;}' >
@@ -43,7 +47,7 @@ export default {
                 servi:'bronze-star'
               },
             update:false,
-            taux :[],
+            taux :this.$store.state.taux,
             selectedDepot : null,
             clicked:false,
             servie:false,
@@ -55,33 +59,49 @@ export default {
             query: '',
             currentPage: 1,
             showNextButton: false,
-            showPrevButton: false
+            showPrevButton: false,
+            search:'title'
+
         }
     },
     watch:{
         "$store.state.taux"(new_val){
             this.taux = new_val
-        }
+        },
     },
     mounted() {
         this.getTransfer()
     },
 
-    computed:{
-        header(){
-            return{
-                headers :{
-                    "Authorization" : `Bearer ${this.$store.state.user.access}`
-                }
-            }
-        },
-    },
+      // computed: {
+      //   search(value) {
+      //       this.getData(value)
+      //   }
+
+      // },
     methods: {
+        getData(){
+          let api_url = this.$store.state.url+"/taux/"
+          if(this.search!==''||this.search!==null) {
+            api_url = this.$store.state.url+`/taux/?search=${this.search}`
+          }
+          this.loading = true;
+          axios.get(api_url, this.header)
+              .then((response) => {
+                this.$store.state.taux = response.data
+     
+                this.loading = false;
+              })
+              .catch((err) => {
+                this.loading = false;
+                console.log(err);
+              })
+        },
         getTransfer() {
             axios.get(this.$store.state.url+`/taux/?page=${this.currentPage}`, this.header)
             .then(response => {
                 this.$store.state.taux = response.data 
-                console.log(response.data) 
+     
                 if (response.data.next) {
                     this.showNextButton = true
                 }
@@ -125,7 +145,7 @@ export default {
         },
         DeleteTaux: function(dep) {
             if (confirm('Delete ' + dep.id)) {
-                axios.delete(this.$store.state.url+`/taux/${dep.id}`, {
+                axios.delete(this.$store.state.url+`/taux/${dep.id}/`, {
                     headers :{
                         "Authorization" : `Bearer ${this.$store.state.user.access}`}
                     })
@@ -163,5 +183,47 @@ export default {
   background-color: yellow;
   color:black ;
 }
+div{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  }
+  .search-wrapper {
+    position: relative;
+}
+    label {
+      position: absolute;
+      font-size: 12px;
+      color: rgba(0,0,0,.50);
+      top: 8px;
+      left: 12px;
+      z-index: -1;
+      transition: .15s all ease-in-out;
+    }
+    input {
+      padding: 4px 12px;
+      color: rgba(0,0,0,.70);
+      border: 1px solid rgba(0,0,0,.12);
+      transition: .15s all ease-in-out;
+      background: white;}
+      &:focus {
+        outline: none;
+        transform: scale(1.05);}
+        & + label  {
+          font-size: 10px;
+          transform: translateY(-24px) translateX(-12px);
+        }
+      &::-webkit-input-placeholder {
+          font-size: 12px;
+          color: rgba(0,0,0,.50);
+          font-weight: 100;
+      }
 
+  .wrapper {
+    display: flex;
+    max-width: 444px;
+    flex-wrap: wrap;
+    padding-top: 12px;
+  }
 </style>
