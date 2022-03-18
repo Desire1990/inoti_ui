@@ -29,11 +29,11 @@
                     <h6>Depenses</h6>
                 </div>
             </router-link>
-            <!-- <router-link to="/taux" active-class="active" tag="button" exact class="side-btn" v-if="$store.state.user.groups.includes('admin')">
+            <router-link to="/stat" active-class="active" tag="button" exact class="side-btn" v-if="$store.state.user.groups.includes('admin')">
                 <div class="link-container">
-                    <h6>Taux</h6>
+                    <h6>Statistique</h6>
                 </div>
-            </router-link> -->
+            </router-link>
         </div>
 
     </div>

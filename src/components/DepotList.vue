@@ -136,7 +136,7 @@ export default {
             }
             return total;
         },
-        getData: function() {
+        getData(){
           let api_url = this.$store.state.url+"/depot/"
           if(this.search_term!==''||this.search_term!==null) {
             api_url = this.$store.state.url+`/depot/?search=${this.search_term}`
