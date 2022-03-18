@@ -31,7 +31,7 @@ Vue.mixin({
 		datetime(x) {
 			let date = new Date(x);
 			return new Intl.DateTimeFormat(
-				'en-US',
+				'fr-FR',
 				{ dateStyle: 'short', timeStyle: 'short' }
 			).format(date)
 		},

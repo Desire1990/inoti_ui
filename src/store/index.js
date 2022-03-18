@@ -12,7 +12,8 @@ export default new Vuex.Store({
     transactions: [],
     approvisions:[],
     depenses:[],
-    taux:[]
+    taux:[],
+    stats:[]
   },
   mutations: {
   },
